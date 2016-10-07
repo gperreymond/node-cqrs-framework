@@ -1,2 +1,5 @@
 # node-cqrs-framework
-Do not use, research only.
+
+[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+
+Do not use, research only.  

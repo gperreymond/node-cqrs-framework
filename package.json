@@ -1,0 +1,26 @@
+{
+  "name": "node-cqrs-framework",
+  "version": "0.0.1",
+  "description": "Do not use, research only.",
+  "main": "index.js",
+  "scripts": {
+    "start": "echo \"Error: no start specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gperreymond/node-cqrs-framework.git"
+  },
+  "author": "Gilles Perreymond <gperreymond@gmail.com> (https://github.com/gperreymond)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gperreymond/node-cqrs-framework/issues"
+  },
+  "homepage": "https://github.com/gperreymond/node-cqrs-framework#readme",
+  "dependencies": {
+    "uuid": "2.0.3"
+  },
+  "devDependencies": {
+    "standard": "8.3.0"
+  }
+}
