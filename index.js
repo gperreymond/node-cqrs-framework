@@ -1,9 +1,9 @@
 'use strict'
 
-class Event {
-  constructor () {
-    this.name = null
-  }
-}
+const Engine = require('./lib/Engine')
+const Command = require('./lib/Command')
+const Query = require('./lib/Query')
 
-module.exports = Engine
+module.exports.Engine = Engine
+module.exports.Command = Command
+module.exports.Query = Query

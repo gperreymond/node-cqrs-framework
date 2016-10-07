@@ -1,26 +1,39 @@
 {
   "name": "node-cqrs-framework",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Do not use, research only.",
   "main": "index.js",
   "scripts": {
     "start": "echo \"Error: no start specified\" && exit 1",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "docker-compose up",
+    "test:unit": "node_modules/.bin/_mocha --timeout 15000 --recursive test/unit",
+    "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 15000 --recursive -R spec"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gperreymond/node-cqrs-framework.git"
   },
   "author": "Gilles Perreymond <gperreymond@gmail.com> (https://github.com/gperreymond)",
+  "contributors": [],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/gperreymond/node-cqrs-framework/issues"
   },
   "homepage": "https://github.com/gperreymond/node-cqrs-framework#readme",
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "dependencies": {
+    "bluebird": "3.4.6",
+    "eraro": "0.4.1",
+    "rabbot": "1.0.6",
+    "rabbus": "0.8.2",
     "uuid": "2.0.3"
   },
   "devDependencies": {
+    "chai": "3.5.0",
+    "istanbul": "0.4.5",
+    "mocha": "3.1.0",
     "standard": "8.3.0"
   }
 }
