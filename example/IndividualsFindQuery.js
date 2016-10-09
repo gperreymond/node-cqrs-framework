@@ -1,25 +1,24 @@
 'use strict'
 
 const nconf = require('nconf')
-
-const Promise = require('bluebird')
-const Service = require('feathers-rethinkdb')
-const rethink = require('rethinkdbdash')
-
 nconf
   .env()
   .argv()
   .file({ file: './example/config.json' })
 
-console.log(nconf.get('DOCKER_IP_CONTAINER_RETHINKDB'))
+const Promise = require('bluebird')
+const Service = require('feathers-rethinkdb')
+const rethink = require('rethinkdbdash')
 
 const handler = function (params) {
   return new Promise((resolve, reject) => {
     const r = rethink({
-      host: nconf.get('DOCKER_IP_CONTAINER_RETHINKDB'),
-      port: 28015,
-      db: 'test',
-      user: 'admin',
+      host: nconf.get('DATABASE_RETHINKDB_HOST'),
+      port: nconf.get('DATABASE_RETHINKDB_PORT'),
+      db: nconf.get('DATABASE_RETHINKDB_DB'),
+      user: nconf.get('DATABASE_RETHINKDB_USER'),
+      password: nconf.get('DATABASE_RETHINKDB_PASSWORD'),
+      authKey: nconf.get('DATABASE_RETHINKDB_AUTH_KEY'),
       discovery: false,
       silent: true
     })

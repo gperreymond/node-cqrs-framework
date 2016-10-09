@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start:deve": "./dockers/deve/start.sh",
-    "test": "docker-compose up",
     "test:unit": "node_modules/.bin/_mocha --timeout 15000 --recursive test/unit",
     "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 15000 --recursive -R spec"
   },

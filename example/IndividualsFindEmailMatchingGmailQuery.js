@@ -1,5 +1,11 @@
 'use strict'
 
+const nconf = require('nconf')
+nconf
+  .env()
+  .argv()
+  .file({ file: './example/config.json' })
+
 const Promise = require('bluebird')
 const rethink = require('rethinkdbdash')
 const filter = require('feathers-query-filters')
@@ -9,10 +15,12 @@ const Query = require('../').Query
 const queryHanler = function (params = {}) {
   return new Promise((resolve, reject) => {
     const r = rethink({
-      host: '172.17.0.6',
-      port: 28015,
-      db: 'test',
-      user: 'admin',
+      host: nconf.get('DATABASE_RETHINKDB_HOST'),
+      port: nconf.get('DATABASE_RETHINKDB_PORT'),
+      db: nconf.get('DATABASE_RETHINKDB_DB'),
+      user: nconf.get('DATABASE_RETHINKDB_USER'),
+      password: nconf.get('DATABASE_RETHINKDB_PASSWORD'),
+      authKey: nconf.get('DATABASE_RETHINKDB_AUTH_KEY'),
       discovery: false,
       silent: true
     })
