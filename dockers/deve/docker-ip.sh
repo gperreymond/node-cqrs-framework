@@ -6,7 +6,7 @@ clear
 sudo true
 
 docker_ip() {
-  export $1=$(sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' "$2")
+  export $1=$(sudo docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$2")
 }
 
 # set dockers ip
