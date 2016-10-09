@@ -2,18 +2,20 @@ version: '2'
 
 services:
 
-  cqrs:
-    container_name: cqrs
+  rabbus:
+    container_name: rabbus
     build:
       context: ./
       dockerfile: dockerfile
     ports:
       - "5858:5858"
     volumes:
-      - ./lib:/usr/src/app/lib
-      - ./test:/usr/src/app/test
-      - ./index.js:/usr/src/app/index.js
+      - ./rabbus:/usr/src/app/rabbus
+      - ./demos:/usr/src/app/demos
       - ./package.json:/usr/src/app/package.json
+      - ./.jshintrc:/usr/src/app/.jshintrc
+      - ./.jshintrc-specs:/usr/src/app/.jshintrc-specs
+      - ./gruntfile.js:/usr/src/app/gruntfile.js
       - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
     working_dir: /usr/src/app
     depends_on:
@@ -21,7 +23,7 @@ services:
     entrypoint:
       - entrypoint.sh
     networks:
-      - cqrs-network
+      - rabbus-network
 
   rabbitmq:
     image: "rabbitmq:management"
@@ -29,8 +31,8 @@ services:
       - "5672:5672"
       - "15672:15672"
     networks:
-      - cqrs-network
+      - rabbus-network
 
 networks:
-    cqrs-network:
-        driver: bridge
+  rabbus-network:
+    driver: bridge

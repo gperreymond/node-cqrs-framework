@@ -4,6 +4,10 @@
 
 Do not use, research only.  
 
+## Rabbitmq local
+
+```docker run -d --hostname my-rabbit --name some-rabbit rabbitmq:management```
+
 ## Engine
 
 ## Trigger

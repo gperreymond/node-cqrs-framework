@@ -1,10 +1,10 @@
 {
   "name": "node-cqrs-framework",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Do not use, research only.",
   "main": "index.js",
   "scripts": {
-    "start": "echo \"Error: no start specified\" && exit 1",
+    "start:deve": "./dockers/deve/start.sh",
     "test": "docker-compose up",
     "test:unit": "node_modules/.bin/_mocha --timeout 15000 --recursive test/unit",
     "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 15000 --recursive -R spec"
@@ -26,14 +26,16 @@
   "dependencies": {
     "bluebird": "3.4.6",
     "eraro": "0.4.1",
-    "rabbot": "1.0.6",
-    "rabbus": "0.8.2",
+    "nconf": "0.8.4",
     "uuid": "2.0.3"
   },
   "devDependencies": {
     "chai": "3.5.0",
+    "feathers-query-filters": "2.1.0",
+    "feathers-rethinkdb": "0.2.8",
     "istanbul": "0.4.5",
     "mocha": "3.1.0",
+    "rethinkdbdash": "2.3.23",
     "standard": "8.3.0"
   }
 }

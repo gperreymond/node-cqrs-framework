@@ -1,7 +1,7 @@
 /* global describe:false, it:false */
 'use strict'
 
-const Command = require('../..').Command
+const Query = require('../..').Query
 
 const chai = require('chai')
 const expect = chai.expect
@@ -18,9 +18,9 @@ const handlerMockReject = function () {
   })
 }
 
-describe('[unit] Class Command', function () {
+describe('[unit] Class Query', function () {
   it('should create a new class', function (done) {
-    let command = new Command('TestUnitCommand', handlerMockResolve)
+    let command = new Query('TestUnitQuery', handlerMockResolve)
     expect(command).to.be.an('object')
     expect(command).to.have.property('uuid')
     expect(command).to.have.property('error')
@@ -29,7 +29,7 @@ describe('[unit] Class Command', function () {
     expect(command).to.have.property('handler')
     expect(command.uuid).to.be.a('string')
     expect(command.error).to.be.a('function')
-    expect(command.type).to.be.equal('Command')
+    expect(command.type).to.be.equal('Query')
     expect(command.name).to.be.a('string')
     expect(command.handler).to.be.a('function')
     expect(command.handler()).to.have.property('then')
@@ -37,18 +37,25 @@ describe('[unit] Class Command', function () {
     done()
   })
   it('should execute the handler with no error', function (done) {
-    let command = new Command('TestUnitCommand', handlerMockResolve)
-    command.execute()
+    let query = new Query('TestUnitQuery', handlerMockResolve)
+    query.execute()
       .then(function (result) {
         expect(result).to.be.an('object')
-        expect(result).to.have.property('debug')
-        expect(result.debug).to.be.equal(true)
+        expect(result).to.have.property('uuid')
+        expect(result).to.have.property('type')
+        expect(result).to.have.property('name')
+        expect(result).to.have.property('exectime')
+        expect(result).to.have.property('result')
+        expect(result.uuid).to.be.a('string')
+        expect(result.type).to.be.a('string')
+        expect(result.name).to.be.a('string')
+        expect(result.exectime).to.be.a('number')
         done()
       })
   })
   it('should execute the handler and return error', function (done) {
-    let command = new Command('TestUnitCommand', handlerMockReject)
-    command.execute()
+    let query = new Query('TestUnitCommand', handlerMockReject)
+    query.execute()
       .catch(function (error) {
         expect(error).to.be.an('error')
         expect(error).to.have.property('eraro')
