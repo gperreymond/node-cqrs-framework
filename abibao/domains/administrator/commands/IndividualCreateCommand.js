@@ -4,13 +4,13 @@ const nconf = require('nconf')
 nconf
   .env()
   .argv()
-  .file({ file: './example/config.json' })
+  .file({ file: './abibao/config.json' })
 
 const Promise = require('bluebird')
 const Service = require('feathers-rethinkdb')
 const rethink = require('rethinkdbdash')
 
-const handler = function (params) {
+const handler = function (params = {}) {
   return new Promise((resolve, reject) => {
     const r = rethink({
       host: nconf.get('DATABASE_RETHINKDB_HOST'),
@@ -30,21 +30,8 @@ const handler = function (params) {
         max: 50
       }
     })
-    service.find(params).then(resolve).catch(reject)
+    service.create(params).then(resolve).catch(reject)
   })
 }
 
-// module.exports = handler
-
-const Query = require('../').Query
-const query = new Query('IndividualsFindQuery', handler)
-query
-  .execute()
-  .then((result) => {
-    console.log(result)
-    process.exit(0)
-  })
-  .catch((error) => {
-    console.log(error)
-    process.exit(1)
-  })
+module.exports = handler

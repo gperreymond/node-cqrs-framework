@@ -4,14 +4,12 @@ const nconf = require('nconf')
 nconf
   .env()
   .argv()
-  .file({ file: './example/config.json' })
+  .file({ file: './abibao/config.json' })
 
 const Promise = require('bluebird')
 const rethink = require('rethinkdbdash')
 
-const Query = require('../').Query
-
-const queryHanler = function (params) {
+const handler = function (params) {
   return new Promise((resolve, reject) => {
     const r = rethink({
       host: nconf.get('DATABASE_RETHINKDB_HOST'),
@@ -51,14 +49,4 @@ const queryHanler = function (params) {
   })
 }
 
-let query = new Query('IndividualsGroupByEmailDomainExcludeLittleOnes', queryHanler)
-query
-  .execute()
-  .then((result) => {
-    console.log(result)
-    process.exit(0)
-  })
-  .catch((error) => {
-    console.log(error)
-    process.exit(1)
-  })
+module.exports = handler

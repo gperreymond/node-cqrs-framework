@@ -1,10 +1,11 @@
 {
   "name": "node-cqrs-framework",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Do not use, research only.",
   "main": "index.js",
   "scripts": {
     "start:deve": "./dockers/deve/start.sh",
+    "test:standard": "node_modules/.bin/standard --verbose | snazzy",
     "test:unit": "node_modules/.bin/_mocha --timeout 15000 --recursive test/unit",
     "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 15000 --recursive -R spec"
   },
@@ -20,21 +21,33 @@
   },
   "homepage": "https://github.com/gperreymond/node-cqrs-framework#readme",
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.7.0"
   },
   "dependencies": {
     "bluebird": "3.4.6",
     "eraro": "0.4.1",
+    "feathers-query-filters": "2.1.0",
+    "feathers-rethinkdb": "0.2.8",
+    "glob": "7.1.1",
+    "hoek": "4.1.0",
+    "joi": "9.1.0",
+    "lodash": "4.16.4",
     "nconf": "0.8.4",
+    "rethinkdbdash": "2.3.23",
     "uuid": "2.0.3"
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "feathers-query-filters": "2.1.0",
-    "feathers-rethinkdb": "0.2.8",
+    "chance": "1.0.4",
     "istanbul": "0.4.5",
     "mocha": "3.1.0",
-    "rethinkdbdash": "2.3.23",
+    "snazzy": "5.0.0",
     "standard": "8.3.0"
+  },
+  "standard": {
+    "ignore": [
+      "coverage/**",
+      "dockers/**"
+    ]
   }
 }

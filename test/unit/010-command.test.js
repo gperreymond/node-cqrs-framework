@@ -18,8 +18,8 @@ const handlerMockReject = function () {
   })
 }
 
-describe('[unit] Class Command', function () {
-  it('should create a new class', function (done) {
+describe('[unit] class command', function () {
+  it('should create a new Command', function (done) {
     let command = new Command('TestUnitCommand', handlerMockResolve)
     expect(command).to.be.an('object')
     expect(command).to.have.property('uuid')

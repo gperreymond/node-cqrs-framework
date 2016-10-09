@@ -4,15 +4,13 @@ const nconf = require('nconf')
 nconf
   .env()
   .argv()
-  .file({ file: './example/config.json' })
+  .file({ file: './abibao/config.json' })
 
 const Promise = require('bluebird')
 const rethink = require('rethinkdbdash')
 const filter = require('feathers-query-filters')
 
-const Query = require('../').Query
-
-const queryHanler = function (params = {}) {
+const handler = function (params = {}) {
   return new Promise((resolve, reject) => {
     const r = rethink({
       host: nconf.get('DATABASE_RETHINKDB_HOST'),
@@ -25,7 +23,7 @@ const queryHanler = function (params = {}) {
       silent: true
     })
 
-    const paginate = typeof params.paginate !== 'undefined' ? params.paginate : this.paginate
+    const paginate = typeof params.paginate !== 'undefined' ? params.paginate : false
 
     // Start with finding all, and limit when necessary.
     let q = r.table('individuals').filter(r.row('email').match('@gmail.com$'))
@@ -73,7 +71,9 @@ const queryHanler = function (params = {}) {
   })
 }
 
-let query = new Query('IndividualsFindEmailMatchingGmailQuery', queryHanler)
+module.exports = handler
+
+/*
 query
   .execute({
     paginate: {
@@ -94,3 +94,4 @@ query
     console.log(error)
     process.exit(1)
   })
+*/
