@@ -9,10 +9,10 @@ const expect = chai.expect
 
 let engine
 
-describe('[unit] IndividualsFindEmailMatchingGmailQuery', function () {
+describe('[unit] GroupIndividualsByEmailDomainExcludeMinimumQuery', function () {
   it('should initialize Engine', function (done) {
     engine = new Engine({
-      source: path.resolve(__dirname, '../../../../..', 'abibao')
+      source: path.resolve(__dirname, '../../../../..', 'cqrs')
     })
     expect(engine).to.be.an('object')
     expect(engine).to.have.property('options')
@@ -24,7 +24,7 @@ describe('[unit] IndividualsFindEmailMatchingGmailQuery', function () {
     done()
   })
   it('should success', function (done) {
-    engine.queries.individualsGroupByEmailDomainExcludeLittleOnesQuery.execute()
+    engine.execute('groupIndividualsByEmailDomainExcludeMinimumQuery')
       .then(function (result) {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')

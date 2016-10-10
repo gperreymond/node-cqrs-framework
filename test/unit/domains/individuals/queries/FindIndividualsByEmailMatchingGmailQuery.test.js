@@ -9,10 +9,10 @@ const expect = chai.expect
 
 let engine
 
-describe('[unit] IndividualsFindEmailMatchingGmailQuery', function () {
+describe('[unit] FindIndividualsByEmailMatchingGmailQuery', function () {
   it('should initialize Engine', function (done) {
     engine = new Engine({
-      source: path.resolve(__dirname, '../../../../..', 'abibao')
+      source: path.resolve(__dirname, '../../../../..', 'cqrs')
     })
     expect(engine).to.be.an('object')
     expect(engine).to.have.property('options')
@@ -23,8 +23,8 @@ describe('[unit] IndividualsFindEmailMatchingGmailQuery', function () {
     expect(engine.starttime).to.be.a('number')
     done()
   })
-  it('should success not in paginate mode', function (done) {
-    engine.queries.individualsFindEmailMatchingGmailQuery.execute()
+  it('should success in array mode', function (done) {
+    engine.execute('findIndividualsByEmailMatchingGmailQuery')
       .then(function (result) {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
@@ -53,7 +53,7 @@ describe('[unit] IndividualsFindEmailMatchingGmailQuery', function () {
         $sort: {email: 1}
       }
     }
-    engine.queries.individualsFindEmailMatchingGmailQuery.execute(options)
+    engine.execute('findIndividualsByEmailMatchingGmailQuery', options)
       .then(function (result) {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
@@ -84,7 +84,7 @@ describe('[unit] IndividualsFindEmailMatchingGmailQuery', function () {
         $sort: {email: -1}
       }
     }
-    engine.queries.individualsFindEmailMatchingGmailQuery.execute(options)
+    engine.execute('findIndividualsByEmailMatchingGmailQuery', options)
       .then(function (result) {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')

@@ -3,23 +3,23 @@ version: '2'
 services:
 
   rethinkdb:
-    container_name: deve-rethinkdb
-    image: "rethinkdb:2.3.1"
+    container_name: rethinkdb_cqrs_deve
+    image: "rethinkdb:latest"
     ports:
       - "8080:8080"
       - "28015:28015"
     networks:
-      - cqrs-network-deve
+      - network_cqrs_deve
 
   rabbitmq:
-    container_name: deve-rabbitmq
+    container_name: rabbitmq_cqrs_deve
     image: "rabbitmq:management"
     ports:
       - "5672:5672"
       - "15672:15672"
     networks:
-      - cqrs-network-deve
+      - network_cqrs_deve
 
 networks:
-    cqrs-network-deve:
+    network_cqrs_deve:
         driver: bridge

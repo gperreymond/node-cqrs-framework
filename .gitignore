@@ -1,10 +1,8 @@
-# Configurations
-example/config.json
-
 # Logs
 logs
 *.log
 npm-debug.log*
+*.queues
 
 # Runtime data
 pids

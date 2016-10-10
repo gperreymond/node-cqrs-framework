@@ -16,7 +16,10 @@ let data
 describe('[unit] individuals life cycle', function () {
   it('should initialize Engine', function (done) {
     engine = new Engine({
-      source: path.resolve(__dirname, '../../../..', 'abibao')
+      bus: {
+        url: require(path.resolve(__dirname, '../../../..', 'cqrs/config.json')).CQRS_RABBITMQ_URL
+      },
+      source: path.resolve(__dirname, '../../../..', 'cqrs')
     })
     expect(engine).to.be.an('object')
     expect(engine).to.have.property('options')
@@ -31,7 +34,7 @@ describe('[unit] individuals life cycle', function () {
     data = {
       email: chance.email({domain: 'gmail.com'})
     }
-    engine.commands.individualCreateCommand.execute(data)
+    engine.execute('createIndividualCommand', data)
       .then(function (result) {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
@@ -50,11 +53,11 @@ describe('[unit] individuals life cycle', function () {
       })
       .catch(done)
   })
-  it('should find an individual', function (done) {
+  it('should find some individuals', function (done) {
     let q = {
       email: data.email
     }
-    engine.queries.individualsFindQuery.execute(q)
+    engine.execute('findIndividualsQuery', q)
       .then(function (result) {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
