@@ -13,7 +13,8 @@ Le lancement s'effectue via des commande npm.
 #### 1) Démarrage des dockers sur la machine de development
 
 ```
-$ npm run deve:prepare```
+$ npm run deve:prepare
+```
 
 Voici la liste des __containers__ qui vont être utilisés et démarrés :
 
@@ -23,7 +24,8 @@ Voici la liste des __containers__ qui vont être utilisés et démarrés :
 #### 2) Configuration automatique des variables d'environnement
 
 ```
-$ npm run deve:config```
+$ npm run deve:config
+```
 
 ## Engine
 
@@ -83,7 +85,8 @@ const engine = new Engine({
     'domains/*/commands/*.js',
     'domains/*/queries/*.js'
   ]
-})```
+})
+```
 
 #### 2) Création d'une commande
 
@@ -102,4 +105,5 @@ const handler = function (params = {}) {
   })
 }
 
-module.exports = handler```
+module.exports = handler
+```

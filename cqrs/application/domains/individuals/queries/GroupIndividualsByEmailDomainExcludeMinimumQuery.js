@@ -3,7 +3,7 @@
 const Promise = require('bluebird')
 const r = require('./../../../../lib/rethinkdb').r
 
-const handler = function (params) {
+const handler = function () {
   return new Promise((resolve, reject) => {
     r.table('individuals')
       .merge(function (item) {
