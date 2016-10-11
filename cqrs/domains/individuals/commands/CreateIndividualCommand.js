@@ -20,7 +20,7 @@ const handler = function (params = {}) {
       password: nconf.get('CQRS_RETHINKDB_PASSWORD'),
       authKey: nconf.get('CQRS_RETHINKDB_AUTH_KEY'),
       discovery: false,
-      silent: true
+      silent: false
     })
     const service = new Service({
       Model: r,

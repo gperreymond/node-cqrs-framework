@@ -13,7 +13,7 @@ const expect = chai.expect
 let engine
 let data
 
-describe('[unit] individuals life cycle', function () {
+describe.only('[unit] individuals life cycle', function () {
   it('should initialize Engine', function (done) {
     engine = new Engine({
       bus: {
@@ -51,7 +51,9 @@ describe('[unit] individuals life cycle', function () {
         data = result.result
         done()
       })
-      .catch(done)
+      .catch((error) => {
+        console.log(error)
+      })
   })
   it('should find some individuals', function (done) {
     let q = {

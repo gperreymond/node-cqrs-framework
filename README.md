@@ -26,15 +26,37 @@ $ npm run deve:config```
 
 ## Engine
 
-## Trigger
+C'est le chef d'orchestre du CQRS.
+
+## Service
+
+Le __service__ est l'élément de base du CQRS, il faut le voir comme un __microservice__.  
+L'appel à un __service__ entraîne automatiquement :
+
+- L'emission d'un évènement sur le bus en cas de succès
+- L'emission d'un évènement sur le bus en cas de d'erreur
+
+Ces évènements sont générés automatiquement par le démarrage de __engine__ ; Vous n'avez rien à faire, ni à déclarer.
+
+Techniquement un __service__ c'est :
+
+- Un élément bas niveau
+- Un élément que nous n'utilisons jamais direction
+- Un élément renvoyant une promesse
 
 ## Command
 
-Une commande est un trigger pouvant se déclencher de manière manuelle ou évènementielle.
+Une __commande__ est un __service__ :
+
+- Pouvant être déclenché par __trigger__ ou "appel direct"
+- Renvoyant un état (success ou error) et non des données
 
 ## Query
 
-Une query est un trigger ne pouvant se déclencher que manuellement.
+Une __commande__ est un __service__ :
+
+- Se déclenchant seulement par "appel direct"
+- Renvoyant un état (success ou error) et non des données
 
 ## Architecture CQRS
 
