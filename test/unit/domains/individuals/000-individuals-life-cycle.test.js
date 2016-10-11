@@ -13,13 +13,13 @@ const expect = chai.expect
 let engine
 let data
 
-describe.only('[unit] individuals life cycle', function () {
+describe('[unit] individuals life cycle', function () {
   it('should initialize Engine', function (done) {
     engine = new Engine({
       bus: {
         url: require(path.resolve(__dirname, '../../../..', 'cqrs/config.json')).CQRS_RABBITMQ_URL
       },
-      source: path.resolve(__dirname, '../../../..', 'cqrs')
+      source: path.resolve(__dirname, '../../../..', 'cqrs/application')
     })
     expect(engine).to.be.an('object')
     expect(engine).to.have.property('options')

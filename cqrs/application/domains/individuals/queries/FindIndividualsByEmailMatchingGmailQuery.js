@@ -1,28 +1,11 @@
 'use strict'
 
-const nconf = require('nconf')
-nconf
-  .env()
-  .argv()
-  .file({ file: './cqrs/config.json' })
-
 const Promise = require('bluebird')
-const rethink = require('rethinkdbdash')
+const r = require('./../../../../lib/rethinkdb').r
 const filter = require('feathers-query-filters')
 
 const handler = function (params = {}) {
   return new Promise((resolve, reject) => {
-    const r = rethink({
-      host: nconf.get('CQRS_RETHINKDB_HOST'),
-      port: nconf.get('CQRS_RETHINKDB_PORT'),
-      db: nconf.get('CQRS_RETHINKDB_DB'),
-      user: nconf.get('CQRS_RETHINKDB_USER'),
-      password: nconf.get('CQRS_RETHINKDB_PASSWORD'),
-      authKey: nconf.get('CQRS_RETHINKDB_AUTH_KEY'),
-      discovery: false,
-      silent: true
-    })
-
     const paginate = typeof params.paginate !== 'undefined' ? params.paginate : false
 
     // Start with finding all, and limit when necessary.
