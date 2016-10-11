@@ -2,15 +2,43 @@
 'use strict'
 
 const Engine = require('../..').Engine
+const Command = require('../..').Command
 
 const chai = require('chai')
 const expect = chai.expect
+
+const handlerMockReject = function () {
+  return new Promise((resolve, reject) => {
+    reject(new Error('This an error in the unit tests'))
+  })
+}
 
 describe('[unit] class engine', function () {
   it('should initialize engine without options', function (done) {
     let engine = new Engine()
     engine.initialize()
     done()
+  })
+  it('should use the execute from engine and be rejected', function (done) {
+    let engine = new Engine()
+    engine.CQRS = {
+      'handlerMockReject': {
+        Prototype: Command,
+        name: 'handlerMockReject',
+        handler: handlerMockReject
+      }
+    }
+    engine.execute('handlerMockReject')
+    .catch((error) => {
+      expect(error).to.be.an('error')
+      expect(error).to.have.property('eraro')
+      expect(error).to.have.property('cqrs-framework')
+      expect(error).to.have.property('details')
+      expect(error.eraro).to.be.equal(true)
+      expect(error['cqrs-framework']).to.be.equal(true)
+      expect(error.details).to.be.an('object')
+      done()
+    })
   })
   it('should not initialize Engine because no files are found', function (done) {
     try {

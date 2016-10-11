@@ -28,7 +28,7 @@ const handler = function (params = {}) {
     // Start with finding all, and limit when necessary.
     let q = r.table('individuals').filter(r.row('email').match('@gmail.com$'))
     // Prepare the special query params.
-    let { filters, query } = filter(params.query || {}, paginate)
+    let { filters } = filter(params.query || {}, paginate)
 
     // Handle $sort
     if (filters.$sort) {
@@ -72,26 +72,3 @@ const handler = function (params = {}) {
 }
 
 module.exports = handler
-
-/*
-query
-  .execute({
-    paginate: {
-      default: 5,
-      max: 25
-    },
-    query: {
-      $skip: 0,
-      $limit: 10,
-      $sort: {email: 1}
-    }
-  })
-  .then((result) => {
-    console.log(result)
-    process.exit(0)
-  })
-  .catch((error) => {
-    console.log(error)
-    process.exit(1)
-  })
-*/
