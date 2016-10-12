@@ -9,22 +9,29 @@ const expect = chai.expect
 
 let engine
 
-describe('[unit] FindIndividualsByEmailMatchingGmailQuery', function () {
+describe('[integration] FindIndividualsByEmailMatchingGmailQuery', function () {
   it('should initialize Engine', function (done) {
     engine = new Engine({
-      source: path.resolve(__dirname, '../../../../..', 'cqrs')
+      bus: {
+        url: require(path.resolve(__dirname, '../../../../..', 'cqrs/config.json')).CQRS_RABBITMQ_URL
+      },
+      source: path.resolve(__dirname, '../../../../..', 'cqrs/application')
     })
-    expect(engine).to.be.an('object')
-    expect(engine).to.have.property('options')
-    expect(engine).to.have.property('starttime')
-    expect(engine).to.have.property('uuid')
-    expect(engine.options).to.be.an('object')
-    expect(engine.uuid).to.be.a('string')
-    expect(engine.starttime).to.be.a('number')
-    done()
+    engine.initialize()
+      .then(() => {
+        expect(engine).to.be.an('object')
+        expect(engine).to.have.property('options')
+        expect(engine).to.have.property('starttime')
+        expect(engine).to.have.property('uuid')
+        expect(engine.options).to.be.an('object')
+        expect(engine.uuid).to.be.a('string')
+        expect(engine.starttime).to.be.a('number')
+        done()
+      })
+      .catch(done)
   })
   it('should success in array mode', function (done) {
-    engine.execute('findIndividualsByEmailMatchingGmailQuery')
+    engine.execute('FindIndividualsByEmailMatchingGmailQuery')
       .then(function (result) {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
@@ -53,7 +60,7 @@ describe('[unit] FindIndividualsByEmailMatchingGmailQuery', function () {
         $sort: {email: 1}
       }
     }
-    engine.execute('findIndividualsByEmailMatchingGmailQuery', options)
+    engine.execute('FindIndividualsByEmailMatchingGmailQuery', options)
       .then(function (result) {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
@@ -84,7 +91,7 @@ describe('[unit] FindIndividualsByEmailMatchingGmailQuery', function () {
         $sort: {email: -1}
       }
     }
-    engine.execute('findIndividualsByEmailMatchingGmailQuery', options)
+    engine.execute('FindIndividualsByEmailMatchingGmailQuery', options)
       .then(function (result) {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')

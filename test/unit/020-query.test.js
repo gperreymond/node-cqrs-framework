@@ -20,20 +20,20 @@ const handlerMockReject = function () {
 
 describe('[unit] class query', function () {
   it('should create a new Query', function (done) {
-    let command = new Query('TestUnitQuery', handlerMockResolve)
-    expect(command).to.be.an('object')
-    expect(command).to.have.property('uuid')
-    expect(command).to.have.property('error')
-    expect(command).to.have.property('type')
-    expect(command).to.have.property('name')
-    expect(command).to.have.property('handler')
-    expect(command.uuid).to.be.a('string')
-    expect(command.error).to.be.a('function')
-    expect(command.type).to.be.equal('Query')
-    expect(command.name).to.be.a('string')
-    expect(command.handler).to.be.a('function')
-    expect(command.handler()).to.have.property('then')
-    expect(command.handler()).to.have.property('catch')
+    let query = new Query('TestUnitQuery', handlerMockResolve)
+    expect(query).to.be.an('object')
+    expect(query).to.have.property('uuid')
+    expect(query).to.have.property('error')
+    expect(query).to.have.property('type')
+    expect(query).to.have.property('name')
+    expect(query).to.have.property('handler')
+    expect(query.uuid).to.be.a('string')
+    expect(query.error).to.be.a('function')
+    expect(query.type).to.be.equal('Query')
+    expect(query.name).to.be.a('string')
+    expect(query.handler).to.be.a('function')
+    expect(query.handler()).to.have.property('then')
+    expect(query.handler()).to.have.property('catch')
     done()
   })
   it('should execute the handler with no error', function (done) {
@@ -54,7 +54,7 @@ describe('[unit] class query', function () {
       })
   })
   it('should execute the handler and return error', function (done) {
-    let query = new Query('TestUnitCommand', handlerMockReject)
+    let query = new Query('TestUnitquery', handlerMockReject)
     query.execute()
       .catch(function (error) {
         expect(error).to.be.an('error')

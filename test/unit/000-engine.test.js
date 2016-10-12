@@ -16,17 +16,12 @@ const handlerMockReject = function () {
 describe('[unit] class engine', function () {
   it('should initialize engine without options', function (done) {
     let engine = new Engine()
-    engine.initialize()
-    done()
+    engine.initialize().then(done)
   })
   it('should use the execute from engine and be rejected', function (done) {
     let engine = new Engine()
-    engine.CQRS = {
-      'handlerMockReject': {
-        Prototype: Command,
-        name: 'handlerMockReject',
-        handler: handlerMockReject
-      }
+    engine.services = {
+      'handlerMockReject': new Command('handlerMockReject', handlerMockReject)
     }
     engine.execute('handlerMockReject')
     .catch((error) => {
@@ -41,12 +36,10 @@ describe('[unit] class engine', function () {
     })
   })
   it('should not initialize Engine because no files are found', function (done) {
-    try {
-      let engine = new Engine({
-        source: 'no_files_here_to_initialize'
-      })
-      engine.initialize()
-    } catch (error) {
+    let engine = new Engine({
+      source: 'no_files_here_to_initialize'
+    })
+    engine.initialize().catch((error) => {
       expect(error).to.be.an('error')
       expect(error).to.have.property('eraro')
       expect(error).to.have.property('cqrs-framework')
@@ -55,6 +48,6 @@ describe('[unit] class engine', function () {
       expect(error['cqrs-framework']).to.be.equal(true)
       expect(error.details).to.be.an('object')
       done()
-    }
+    })
   })
 })

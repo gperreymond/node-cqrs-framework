@@ -31,10 +31,29 @@ $ npm run deve:config
 
 C'est le chef d'orchestre du CQRS.
 
+### Trigger
+
+Un __trigger__ écoute sur le bus le passage des évènements.  
+Si un évènement lui est destiné, il le prend et le traite via son __handler__.
+Un __trigger__ n'est pas une promesse, à la fin du handler le process se termine.
+
+Un __trigger__ peut être :
+
+- Utilisé pour un système de logs, ELK par exemple
+- Utilisé pour lancer un ou plusieurs batchs
+- Utilisé pour lancer d'autres évènements sur le bus
+- Utilisé pour lancer des commandes
+- Etc...
+
+Il existe deux types de __triggers__ :
+
+- __System__ : Générés automatiquement par de le démarrage de __engine__
+- __Custom__ : Les votres, faites vous plaisir
+
 ## Service
 
-Le __service__ est l'élément de base du CQRS, il faut le voir comme un __microservice__.  
-L'appel à un __service__ entraîne automatiquement :
+Le __service__ est l'élément de base du CQRS, il faut le voir comme un __microservice__ ou une __task__.  
+La résolution d'un __service__ entraîne automatiquement :
 
 - L'emission d'un évènement sur le bus en cas de succès
 - L'emission d'un évènement sur le bus en cas de d'erreur
@@ -44,22 +63,16 @@ Ces évènements sont générés automatiquement par le démarrage de __engine__
 Techniquement un __service__ c'est :
 
 - Un élément bas niveau
-- Un élément que nous n'utilisons jamais direction
-- Un élément renvoyant une promesse
+- Un élément à ne jamais exposer directement
+- Un élément dont son handler est une promesse
 
 ## Command
 
-Une __commande__ est un __service__ :
-
-- Pouvant être déclenché par __trigger__ ou "appel direct"
-- Renvoyant un état (success ou error) et non des données
+Une __command__ est un __service__ renvoyant un état (success ou error) et non des données.
 
 ## Query
 
-Une __commande__ est un __service__ :
-
-- Se déclenchant seulement par "appel direct"
-- Renvoyant un état (success ou error) et non des données
+Une __query__ est un __service__ renvoyant des données ou un état (error).
 
 ## Architecture CQRS
 
