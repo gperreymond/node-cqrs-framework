@@ -3,4 +3,4 @@
 alias dir="ls -lai"
 
 npm install
-npm run test:unit
+npm test

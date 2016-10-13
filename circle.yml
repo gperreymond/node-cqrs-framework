@@ -1,0 +1,13 @@
+machine:
+  timezone:
+    Europe/Paris
+  services:
+    - docker
+
+dependencies:
+  pre:
+    - pip install docker-compose
+
+test:
+  pre:
+    - docker-compose --file docker/test/docker-compose.yml up -d

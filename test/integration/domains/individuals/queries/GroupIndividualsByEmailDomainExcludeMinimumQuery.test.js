@@ -13,9 +13,9 @@ describe('[integration] GroupIndividualsByEmailDomainExcludeMinimumQuery', funct
   it('should initialize Engine', function (done) {
     engine = new Engine({
       bus: {
-        url: require(path.resolve(__dirname, '../../../../..', 'cqrs/config.json')).CQRS_RABBITMQ_URL
+        url: require(path.resolve(__dirname, '../../../..', 'example/nconf.js')).CQRS_RABBITMQ_URL
       },
-      source: path.resolve(__dirname, '../../../../..', 'cqrs/application')
+      source: path.resolve(__dirname, '../../../..', 'example/application')
     })
     engine.initialize()
     .then(() => {

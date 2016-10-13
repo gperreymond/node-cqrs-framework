@@ -4,6 +4,6 @@ const nconf = require('nconf')
 nconf
   .env()
   .argv()
-  .file({ file: './cqrs/config.json' })
+  .file({ file: './example/nconf.js' })
 
 module.exports = nconf

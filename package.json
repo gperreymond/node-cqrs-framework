@@ -1,15 +1,15 @@
 {
   "name": "node-cqrs-framework",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Do not use, research only.",
   "main": "index.js",
   "scripts": {
-    "deve:prepare": "./dockers/deve/prepare.sh",
-    "deve:config": "./cqrs/config.sh",
+    "docker:prepare": "./docker/deve/prepare.sh",
+    "test": "./test/run-all.sh",
     "test:standard": "node_modules/.bin/standard --verbose | snazzy",
-    "test:unit": "node_modules/.bin/_mocha --timeout 5000 --recursive test/unit",
-    "test:integration": "node_modules/.bin/_mocha --timeout 5000 --recursive test/integration",
-    "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 5000 --recursive -R spec"
+    "test:unit": "node_modules/.bin/_mocha --timeout 5000 --use_strict --recursive test/unit",
+    "test:integration": "node_modules/.bin/_mocha --timeout 5000 --use_strict --recursive test/integration",
+    "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --opts ./.mocharc"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,6 @@
     "eraro": "0.4.1",
     "glob": "7.1.1",
     "hoek": "4.1.0",
-    "joi": "9.1.0",
     "lodash": "4.16.4",
     "nconf": "0.8.4",
     "servicebus": "2.0.5",
@@ -43,7 +42,7 @@
     "feathers-query-filters": "2.1.0",
     "feathers-rethinkdb": "0.2.8",
     "istanbul": "0.4.5",
-    "joi": "9.1.0",
+    "joi": "9.1.1",
     "mocha": "3.1.2",
     "rethinkdbdash": "2.3.23",
     "snazzy": "5.0.0",
@@ -52,7 +51,7 @@
   "standard": {
     "ignore": [
       "coverage/**",
-      "dockers/**"
+      "docker/**"
     ]
   }
 }

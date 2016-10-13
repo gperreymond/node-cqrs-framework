@@ -3,36 +3,47 @@ version: '2'
 services:
 
   rabbus:
-    container_name: rabbus
+    container_name: cqrs
     build:
       context: ./
       dockerfile: dockerfile
     ports:
       - "5858:5858"
     volumes:
-      - ./rabbus:/usr/src/app/rabbus
-      - ./demos:/usr/src/app/demos
+      - ./example:/usr/src/app/example
+      - ./lib:/usr/src/app/lib
+      - ./test:/usr/src/app/test
+      - ./index.js:/usr/src/app/index.js
       - ./package.json:/usr/src/app/package.json
-      - ./.jshintrc:/usr/src/app/.jshintrc
-      - ./.jshintrc-specs:/usr/src/app/.jshintrc-specs
-      - ./gruntfile.js:/usr/src/app/gruntfile.js
+      - ./.mocharc:/usr/src/app/.mocharc
       - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
     working_dir: /usr/src/app
     depends_on:
       - rabbitmq
+      - rethinkdb
     entrypoint:
       - entrypoint.sh
     networks:
       - rabbus-network
 
+  rethinkdb:
+    container_name: rethinkdb_cqrs
+    image: "rethinkdb:latest"
+    ports:
+      - "8080:8080"
+      - "28015:28015"
+    networks:
+      - network_cqrs
+
   rabbitmq:
+    container_name: rabbitmq_cqrs
     image: "rabbitmq:management"
     ports:
       - "5672:5672"
       - "15672:15672"
     networks:
-      - rabbus-network
+      - network_cqrs
 
 networks:
-  rabbus-network:
-    driver: bridge
+    network_cqrs:
+        driver: bridge
