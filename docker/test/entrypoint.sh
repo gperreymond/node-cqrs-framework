@@ -1,6 +1,10 @@
 #!/bin/sh
 
-alias dir="ls -lai"
+run_test() {
+  npm install
+  npm test
+}
 
-npm install
-npm test
+if [ "$1" = 'run-test' ]; then
+  run_test
+fi

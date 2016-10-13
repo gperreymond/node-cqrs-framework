@@ -4,4 +4,4 @@ set -a
 clear
 
 # start dockers
-docker-compose --file dockers/deve/docker-compose.yml up -d
+docker-compose --file docker/deve/docker-compose.yml up -d

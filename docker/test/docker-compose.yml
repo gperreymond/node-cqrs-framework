@@ -2,27 +2,17 @@ version: '2'
 
 services:
 
-  rabbus:
+  cqrs:
     container_name: cqrs
     build:
-      context: ./
-      dockerfile: dockerfile
+      context: ./../../
+      dockerfile: docker/test/dockerfile
     ports:
       - "5858:5858"
-    volumes:
-      - ./example:/usr/src/app/example
-      - ./lib:/usr/src/app/lib
-      - ./test:/usr/src/app/test
-      - ./index.js:/usr/src/app/index.js
-      - ./package.json:/usr/src/app/package.json
-      - ./.mocharc:/usr/src/app/.mocharc
-      - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
-    working_dir: /usr/src/app
+    working_dir: /usr/app
     depends_on:
       - rabbitmq
       - rethinkdb
-    entrypoint:
-      - entrypoint.sh
     networks:
       - network_cqrs
 

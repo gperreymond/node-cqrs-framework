@@ -4,6 +4,9 @@ logs
 npm-debug.log*
 *.queues
 
+# Configuration
+example/nconf.json
+
 # Runtime data
 pids
 *.pid

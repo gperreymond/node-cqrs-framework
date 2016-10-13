@@ -6,14 +6,14 @@ machine:
   services:
     - docker
 
-notify:
-  webhooks:
-    - url: https://hooks.slack.com/services/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
-
 dependencies:
   pre:
     - pip install docker-compose
 
 test:
   pre:
-    - docker-compose --file docker/test/docker-compose.yml up -d
+    - npm run docker:test
+
+notify:
+  webhooks:
+    - url: https://hooks.slack.com/services/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
