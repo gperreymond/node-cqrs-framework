@@ -6,6 +6,10 @@ machine:
   services:
     - docker
 
+notify:
+  webhooks:
+    - https://hooks.slack.com/services/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
+
 dependencies:
   pre:
     - pip install docker-compose
