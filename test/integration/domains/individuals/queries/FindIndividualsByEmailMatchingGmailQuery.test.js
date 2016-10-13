@@ -1,4 +1,4 @@
-/* global describe:false, it:false */
+/* global describe:false, it:false, beforeEach:false */
 'use strict'
 
 const Engine = require('../../../../..').Engine
@@ -9,13 +9,22 @@ const expect = chai.expect
 
 let engine
 
+const dockers = require(path.resolve(__dirname, '../../../../..', 'example/dockers'))
+
 describe('[integration] FindIndividualsByEmailMatchingGmailQuery', function () {
+  beforeEach((done) => {
+    dockers.networks('test')
+      .then(() => {
+        done()
+      })
+  })
   it('should initialize Engine', function (done) {
     engine = new Engine({
       bus: {
-        url: require(path.resolve(__dirname, '../../../..', 'example/nconf.js')).CQRS_RABBITMQ_URL
+        url: require(path.resolve(__dirname, '../../../../..', 'example/nconf.json')).CQRS_RABBITMQ_URL
       },
-      source: path.resolve(__dirname, '../../../..', 'example/application')
+      source: path.resolve(__dirname, '../../../../..', 'example/application'),
+      patterns: ['**/*.js']
     })
     engine.initialize()
       .then(() => {

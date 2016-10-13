@@ -8,22 +8,16 @@ WORKDIR /usr/app
 # add bash to the docker container
 RUN apk add --update bash && rm -rf /var/cache/apk/*
 
-# entrypoint
-COPY ./docker/test/entrypoint.sh /usr/app/
-RUN chmod +x /usr/app/entrypoint.sh
-
 # files
-COPY ./package.json /usr/app/
-COPY ./index.js /usr/app/
-COPY ./.mocharc /user/app/
+
+COPY mocha.opts /usr/app
+COPY package.json /usr/app/
+COPY index.js /usr/app/
 
 # directories
 ADD example /usr/app/example
 ADD lib /usr/app/lib
 ADD test /usr/app/test
 
-# port to expose
-EXPOSE 5858
-
-# command
-CMD ["entrypoint.sh run-test"]
+RUN npm install
+RUN npm test

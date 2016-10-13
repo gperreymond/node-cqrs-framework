@@ -11,22 +11,16 @@ Do not use, research only.
 Il faut que __docker__ et __docker-compose__ soient installés sur votre machine.  
 Le lancement s'effectue via des commande npm.
 
-#### 1) Démarrage des dockers sur la machine de development
+#### Démarrage des dockers sur la machine de development
 
 ```
-$ npm run deve:prepare
+$ npm run docker:deve
 ```
 
 Voici la liste des __containers__ qui vont être utilisés et démarrés :
 
 - [x] rethinkdb:latest
 - [x] rabbitmq:management
-
-#### 2) Configuration automatique des variables d'environnement
-
-```
-$ npm run deve:config
-```
 
 ## Engine
 

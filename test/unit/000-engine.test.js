@@ -14,14 +14,32 @@ const handlerMockReject = function () {
 }
 
 describe('[unit] class engine', function () {
-  it('should initialize engine without options', function (done) {
+  it('should not initialize without options', function (done) {
     let engine = new Engine()
-    engine.initialize().then(done)
+    engine.initialize()
+      .then(() => {
+        done(new Error('oups'))
+      })
+      .catch((error) => {
+        expect(error).to.be.an('error')
+        expect(error).to.have.property('eraro')
+        expect(error).to.have.property('cqrs-framework')
+        expect(error).to.have.property('details')
+        expect(error.eraro).to.be.equal(true)
+        expect(error['cqrs-framework']).to.be.equal(true)
+        expect(error.details).to.be.an('object')
+        done()
+      })
   })
-  it('should use the execute from engine and be rejected', function (done) {
+  it('should use the execute and be rejected', function (done) {
     let engine = new Engine()
     engine.services = {
       'handlerMockReject': new Command('handlerMockReject', handlerMockReject)
+    }
+    engine.bus = {
+      publish (name, handler) {
+        return null
+      }
     }
     engine.execute('handlerMockReject')
     .catch((error) => {
@@ -35,7 +53,7 @@ describe('[unit] class engine', function () {
       done()
     })
   })
-  it('should not initialize Engine because no files are found', function (done) {
+  it('should not initialize because no files are found', function (done) {
     let engine = new Engine({
       source: 'no_files_here_to_initialize'
     })

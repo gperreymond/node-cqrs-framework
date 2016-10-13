@@ -22,16 +22,15 @@ const dockerNetwork = function (container) {
 let data = {
   CQRS_RETHINKDB_PORT: 28015,
   CQRS_RETHINKDB_DB: 'test',
-  CQRS_RETHINKDB_USER: 'admin',
-  CQRS_RABBITMQ_URL: 'ampq://' + dockerNetwork('rabbitmq_cqrs')
+  CQRS_RETHINKDB_USER: 'admin'
 }
 
-module.exports.save = function () {
+module.exports.networks = function (env) {
   return new Promise((resolve, reject) => {
-    dockerNetwork('rethinkdb_cqrs')
+    dockerNetwork('rethinkdb_cqrs_' + env)
       .then((ip) => {
         data.CQRS_RETHINKDB_HOST = ip
-        return dockerNetwork('rabbitmq_cqrs')
+        return dockerNetwork('rabbitmq_cqrs_' + env)
       })
       .then((ip) => {
         data.CQRS_RABBITMQ_URL = 'ampq://' + ip

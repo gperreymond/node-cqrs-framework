@@ -1,4 +1,4 @@
-/* global describe:false, it:false */
+/* global describe:false, it:false, beforeEach:false */
 'use strict'
 
 var Chance = require('chance')
@@ -13,13 +13,22 @@ const expect = chai.expect
 let engine
 let data
 
+const dockers = require(path.resolve(__dirname, '../../../..', 'example/dockers'))
+
 describe('[integration] individuals life cycle', function () {
+  beforeEach((done) => {
+    dockers.networks('test')
+      .then(() => {
+        done()
+      })
+  })
   it('should initialize Engine', function (done) {
     engine = new Engine({
       bus: {
-        url: require(path.resolve(__dirname, '../../../..', 'example/nconf.js')).CQRS_RABBITMQ_URL
+        url: require(path.resolve(__dirname, '../../../..', 'example/nconf.json')).CQRS_RABBITMQ_URL
       },
-      source: path.resolve(__dirname, '../../../..', 'example/application')
+      source: path.resolve(__dirname, '../../../..', 'example/application'),
+      patterns: ['**/*.js']
     })
     engine.initialize()
       .then(() => {

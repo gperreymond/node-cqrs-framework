@@ -1,6 +1,5 @@
 #!/bin/sh
 
-set -a
 clear
 
 # start dockers
