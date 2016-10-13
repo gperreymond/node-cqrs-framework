@@ -24,7 +24,7 @@ services:
     entrypoint:
       - entrypoint.sh
     networks:
-      - rabbus-network
+      - network_cqrs
 
   rethinkdb:
     container_name: rethinkdb_cqrs
