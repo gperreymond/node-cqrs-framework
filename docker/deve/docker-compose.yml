@@ -6,8 +6,6 @@ services:
     container_name: rethinkdb.cqrs.deve
     image: "rethinkdb:latest"
     privileged: true
-    links:
-      - rabbitmq_cqrs_deve
     networks:
       - network_cqrs_deve
     ports:
@@ -25,5 +23,6 @@ services:
       - "15672:15672"
 
 networks:
+  
   network_cqrs_deve:
     driver: bridge

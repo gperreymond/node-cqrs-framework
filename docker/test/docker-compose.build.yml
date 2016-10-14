@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+
+  cqrs_test:
+    container_name: cqrs.test
+    build:
+      context: ./../../
+      dockerfile: docker/test/docker-file
+    working_dir: /usr/app
+    links:
+      - rethinkdb_cqrs_test
+      - rabbitmq_cqrs_test
+    networks:
+      - network_cqrs_test
+
+networks:
+
+  network_cqrs_test:
+    driver: bridge

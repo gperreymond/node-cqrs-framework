@@ -1,4 +1,4 @@
 #!/bin/sh
 
 npm run test:standard
-npm run test:unit
+npm run test:coverage

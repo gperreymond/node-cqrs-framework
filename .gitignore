@@ -5,8 +5,8 @@ npm-debug.log*
 *.queues
 
 # Docker
-.rethinkdb.cqrs.env
-.rabbitmq.cqrs.env
+rethinkdb.cqrs.json
+rabbitmq.cqrs.json
 
 # Configuration
 example/nconf.json

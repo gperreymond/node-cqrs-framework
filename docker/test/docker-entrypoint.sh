@@ -6,8 +6,4 @@ if [ "$1" = 'npm-test' ]; then
   npm test
 fi
 
-if [ "$1" = 'ping' ]; then
-	ping localhost
-fi
-
 exec "$@"
