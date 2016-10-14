@@ -1,8 +1,10 @@
 version: '2'
+
 services:
+
   cqrs:
     container_name: circle_cqrs
     build:
-      context: ./../../
-      dockerfile: docker/test
+      context: ./
+      dockerfile: ./dockerfile-test
     working_dir: /usr/app

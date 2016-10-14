@@ -19,7 +19,7 @@ ADD lib /usr/app/lib
 ADD test /usr/app/test
 
 # execution
-COPY docker/test/docker-entrypoint.sh /usr/app/entrypoint.sh
+COPY docker-entrypoint-test.sh /usr/app/entrypoint.sh
 ENTRYPOINT ["/usr/app/entrypoint.sh"]
 RUN chmod +x /usr/app/entrypoint.sh
 
