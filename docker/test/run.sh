@@ -2,7 +2,7 @@
 set -e
 
 # start dockers
-docker-compose --file docker/test/docker-compose.yml up --build
+docker-compose --file docker/test/docker-compose.yml up -d --build
 
 # get network infos
 

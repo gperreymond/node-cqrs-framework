@@ -11,9 +11,12 @@ dependencies:
     - pip install docker-compose
 
 test:
-  pre:
+  override:
     - npm run docker:test
-
-notify:
-  webhooks:
-    - url: https://hooks.slack.com/services/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
+  post:
+     #docker-compose stop was not stopping containers started with docker-compose run
+     # so using this hackity hack to force stop them all
+     - docker stop $(docker ps -a -q)
+     # get each log separately - docker-compose logs times out, I think it's trying to stream even though the containers are stopped.
+     # depends on the standard naming convention of docker-compose
+     - docker logs cqrs.test > $CIRCLE_TEST_REPORTS/cqrs.test.log
