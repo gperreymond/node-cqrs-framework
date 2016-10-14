@@ -12,7 +12,9 @@ dependencies:
 
 test:
   override:
-    - docker-compose --file docker/test/docker-compose.yml up -d
-    - npm run test:unit
+    - docker-compose build
+    - docker-compose pull
+    - docker-compose up:
+        background: true
     - docker-compose stop
     - docker-compose rm -f
