@@ -3,8 +3,11 @@ version: '2'
 services:
 
   rethinkdb_cqrs_deve:
-    container_name: rethinkdb_cqrs_deve
+    container_name: rethinkdb.cqrs.deve
     image: "rethinkdb:latest"
+    privileged: true
+    links:
+      - rabbitmq_cqrs_deve
     networks:
       - network_cqrs_deve
     ports:
@@ -12,8 +15,9 @@ services:
       - "28015:28015"
 
   rabbitmq_cqrs_deve:
-    container_name: rabbitmq_cqrs_deve
+    container_name: rabbitmq.cqrs.deve
     image: "rabbitmq:management"
+    privileged: true
     networks:
       - network_cqrs_deve
     ports:

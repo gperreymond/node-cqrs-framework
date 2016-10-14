@@ -1,33 +1,27 @@
-/* global describe:false, it:false, beforeEach:false */
+/* global describe:false, it:false */
 'use strict'
-
-var Chance = require('chance')
-var chance = new Chance()
-
-const Engine = require('../../../..').Engine
 
 const path = require('path')
 const chai = require('chai')
 const expect = chai.expect
 
+const basedir = path.resolve(__dirname, '../../../..')
+
+const Engine = require(basedir).Engine
+const config = require(path.resolve(basedir, 'example/lib/config'))
+
 let engine
 let data
-
-const dockers = require(path.resolve(__dirname, '../../../..', 'example/dockers'))
+var Chance = require('chance')
+var chance = new Chance()
 
 describe('[integration] individuals life cycle', function () {
-  beforeEach((done) => {
-    dockers.networks('test')
-      .then(() => {
-        done()
-      })
-  })
   it('should initialize Engine', function (done) {
     engine = new Engine({
       bus: {
-        url: require(path.resolve(__dirname, '../../../..', 'example/nconf.json')).CQRS_RABBITMQ_URL
+        url: config.get('CQRS_RABBITMQ_URL')
       },
-      source: path.resolve(__dirname, '../../../..', 'example/application'),
+      source: path.resolve(basedir, 'example/application'),
       patterns: ['**/*.js']
     })
     engine.initialize()

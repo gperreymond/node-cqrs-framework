@@ -4,6 +4,10 @@ logs
 npm-debug.log*
 *.queues
 
+# Docker
+.rethinkdb.cqrs.env
+.rabbitmq.cqrs.env
+
 # Configuration
 example/nconf.json
 

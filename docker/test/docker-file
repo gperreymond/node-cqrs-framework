@@ -9,15 +9,18 @@ WORKDIR /usr/app
 RUN apk add --update bash && rm -rf /var/cache/apk/*
 
 # files
-
 COPY mocha.opts /usr/app
-COPY package.json /usr/app/
-COPY index.js /usr/app/
+COPY package.json /usr/app
+COPY index.js /usr/app
 
 # directories
 ADD example /usr/app/example
 ADD lib /usr/app/lib
 ADD test /usr/app/test
 
-RUN npm install
-RUN npm test
+# execution
+COPY docker/test/docker-entrypoint.sh /usr/app/entrypoint.sh
+ENTRYPOINT ["/usr/app/entrypoint.sh"]
+RUN chmod +x /usr/app/entrypoint.sh
+
+CMD [ "npm-test" ]

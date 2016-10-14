@@ -3,18 +3,24 @@ version: '2'
 services:
 
   cqrs_test:
-    container_name: cqrs_test
+    container_name: cqrs.test
     build:
       context: ./../../
-      dockerfile: docker/test/dockerfile
+      dockerfile: docker/test/docker-file
     working_dir: /usr/app
+    links:
+      - rethinkdb_cqrs_test
+      - rabbitmq_cqrs_test
     depends_on:
       - rethinkdb_cqrs_test
       - rabbitmq_cqrs_test
 
   rethinkdb_cqrs_test:
-    container_name: rethinkdb_cqrs_test
+    container_name: rethinkdb.cqrs.test
     image: "rethinkdb:latest"
+    privileged: true
+    links:
+      - rabbitmq_cqrs_test
     networks:
       - network_cqrs_test
     ports:
@@ -22,8 +28,9 @@ services:
       - "28015:28015"
 
   rabbitmq_cqrs_test:
-    container_name: rabbitmq_cqrs_test
+    container_name: rabbitmq.cqrs.test
     image: "rabbitmq:management"
+    privileged: true
     networks:
       - network_cqrs_test
     ports:

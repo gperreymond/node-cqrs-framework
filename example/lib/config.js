@@ -1,9 +1,10 @@
 'use strict'
 
 const nconf = require('nconf')
-nconf
-  .env()
-  .argv()
-  .file({ file: './example/nconf.json' })
+nconf.env().argv()
+
+nconf.file('global', './example/nconf.json')
+nconf.file('rethinkdb', './example/.rethinkdb.cqrs.env')
+nconf.file('rabbitmq', './example/.rabbitmq.cqrs.env')
 
 module.exports = nconf
