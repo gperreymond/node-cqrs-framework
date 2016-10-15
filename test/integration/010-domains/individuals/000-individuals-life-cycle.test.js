@@ -95,26 +95,6 @@ describe('[integration] individuals life cycle', function () {
       })
       .catch(done)
   })
-  it('should send events on bus to create 2 individuals in a row', function (done) {
-    let current = 2
-    engine.bus.subscribe('CreateIndividualCommand.Success', (event) => {
-      current--
-      if (current === 0) {
-        done()
-      } else {
-        data = {
-          email: chance.email({domain: 'gmail.com'}),
-          createdAt: Date.now()
-        }
-        engine.bus.publish('CreateIndividualCommand.Event', data)
-      }
-    })
-    data = {
-      email: chance.email({domain: 'gmail.com'}),
-      createdAt: Date.now()
-    }
-    engine.bus.publish('CreateIndividualCommand.Event', data)
-  })
   it('should find some individuals', function (done) {
     let q = {
       email: data.email
