@@ -1,10 +1,10 @@
 machine:
   environment:
-    - CQRS_RETHINKDB_PORT=28015
-    - CQRS_RETHINKDB_DB=test
-    - CQRS_RETHINKDB_USER=admin
-    - CQRS_RETHINKDB_HOST=localhost
-    - CQRS_RABBITMQ_URL=ampq://localhost
+    - CQRS_RETHINKDB_PORT: 28015
+    - CQRS_RETHINKDB_DB: test
+    - CQRS_RETHINKDB_USER: admin
+    - CQRS_RETHINKDB_HOST: localhost
+    - CQRS_RABBITMQ_URL: ampq://localhost
   timezone:
     Europe/Paris
   pre:
