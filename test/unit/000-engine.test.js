@@ -4,8 +4,11 @@
 const Engine = require('../..').Engine
 const Command = require('../..').Command
 
+const path = require('path')
 const chai = require('chai')
 const expect = chai.expect
+
+const basedir = path.resolve(__dirname, '../..')
 
 const handlerMockReject = function () {
   return new Promise((resolve, reject) => {
@@ -17,15 +20,38 @@ describe('[unit] class engine', function () {
   it('should not initialize without options', function (done) {
     let engine = new Engine()
     engine.initialize()
-      .then(() => {
-        done(new Error('oups'))
-      })
+      .then(done)
       .catch((error) => {
         expect(error).to.be.an('error')
         expect(error).to.have.property('eraro')
         expect(error).to.have.property('cqrs-framework')
         expect(error).to.have.property('details')
+        expect(error).to.have.property('code')
         expect(error.eraro).to.be.equal(true)
+        expect(error.code).to.be.equal('engine_error_no_bus')
+        expect(error['cqrs-framework']).to.be.equal(true)
+        expect(error.details).to.be.an('object')
+        done()
+      })
+  })
+  it('should not initialize without rabbitmq', function (done) {
+    let engine = new Engine({
+      bus: {
+        url: 'amqp://666.666.666.666:666'
+      },
+      source: path.resolve(basedir, 'example/application'),
+      patterns: ['**/*.js']
+    })
+    engine.initialize()
+      .then(done)
+      .catch((error) => {
+        expect(error).to.be.an('error')
+        expect(error).to.have.property('eraro')
+        expect(error).to.have.property('cqrs-framework')
+        expect(error).to.have.property('details')
+        expect(error).to.have.property('code')
+        expect(error.eraro).to.be.equal(true)
+        expect(error.code).to.be.equal('engine_error_no_bus_connected')
         expect(error['cqrs-framework']).to.be.equal(true)
         expect(error.details).to.be.an('object')
         done()

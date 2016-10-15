@@ -76,6 +76,25 @@ describe('[integration] individuals life cycle', function () {
       })
       .catch(done)
   })
+  it('should get individual', function (done) {
+    engine.execute('GetIndividualByIdQuery', data.id)
+      .then(function (result) {
+        expect(result).to.be.an('object')
+        expect(result).to.have.property('uuid')
+        expect(result).to.have.property('type')
+        expect(result).to.have.property('name')
+        expect(result).to.have.property('exectime')
+        expect(result).to.have.property('result')
+        expect(result.uuid).to.be.a('string')
+        expect(result.type).to.be.a('string')
+        expect(result.name).to.be.a('string')
+        expect(result.exectime).to.be.a('number')
+        expect(result.result).to.have.property('id')
+        expect(result.result.id).to.be.a('string')
+        done()
+      })
+      .catch(done)
+  })
   it('should send events on bus to create 10 individuals in a row', function (done) {
     let current = 10
     engine.bus.subscribe('CreateIndividualCommand.Success', (event) => {
