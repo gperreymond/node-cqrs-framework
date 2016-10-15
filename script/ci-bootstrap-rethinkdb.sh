@@ -19,6 +19,12 @@ echo "--------- "
 docker info
 
 echo "--------- "
+echo "Stop if exists rethinkdb"
+docker stop cqrs_rethinkdb || echo 'no container to stop'
+echo "Remove if exists rethinkdb"
+docker rm cqrs_rethinkdb || echo 'no container to delete'
+
+echo "--------- "
 echo "Setting up rethinkdb"
 
 # startup rethink db

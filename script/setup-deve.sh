@@ -5,5 +5,5 @@
 # exit on sub-module failure
 set -e
 
-./scripts/ci-bootstrap-rethinkdb.sh
-./scripts/ci-bootstrap-rabbitmq.sh
+./script/ci-bootstrap-rethinkdb.sh
+./script/ci-bootstrap-rabbitmq.sh

@@ -20,7 +20,9 @@ describe('[unit] class engine', function () {
   it('should not initialize without options', function (done) {
     let engine = new Engine()
     engine.initialize()
-      .then(done)
+      .then(() => {
+        done(new Error('no error detected'))
+      })
       .catch((error) => {
         expect(error).to.be.an('error')
         expect(error).to.have.property('eraro')
@@ -43,7 +45,9 @@ describe('[unit] class engine', function () {
       patterns: ['**/*.js']
     })
     engine.initialize()
-      .then(done)
+      .then(() => {
+        done(new Error('no error detected'))
+      })
       .catch((error) => {
         expect(error).to.be.an('error')
         expect(error).to.have.property('eraro')

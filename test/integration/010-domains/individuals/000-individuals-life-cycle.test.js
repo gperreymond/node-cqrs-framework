@@ -1,6 +1,7 @@
 /* global describe:false, it:false */
 'use strict'
 
+const uuid = require('uuid')
 const path = require('path')
 const chai = require('chai')
 const expect = chai.expect
@@ -97,6 +98,30 @@ describe('[integration] individuals life cycle', function () {
   })
   it('should find some individuals', function (done) {
     let q = {
+      email: data.email
+    }
+    engine.execute('FindIndividualsQuery', q)
+      .then(function (result) {
+        expect(result).to.be.an('object')
+        expect(result).to.have.property('uuid')
+        expect(result).to.have.property('type')
+        expect(result).to.have.property('name')
+        expect(result).to.have.property('exectime')
+        expect(result).to.have.property('result')
+        expect(result.uuid).to.be.a('string')
+        expect(result.type).to.be.a('string')
+        expect(result.name).to.be.a('string')
+        expect(result.exectime).to.be.a('number')
+        expect(result.result).to.be.an('object')
+        expect(result.result).to.have.property('total')
+        expect(result.result.total).to.be.a('number')
+        done()
+      })
+      .catch(done)
+  })
+  it('should find some individuals with a requester', function (done) {
+    let q = {
+      requester: uuid.v4(),
       email: data.email
     }
     engine.execute('FindIndividualsQuery', q)

@@ -19,6 +19,12 @@ echo "--------- "
 docker info
 
 echo "--------- "
+echo "Stop if exists rabbitmq"
+docker stop cqrs_rabbitmq || echo 'no container to stop'
+echo "Remove if exists rabbitmq"
+docker rm cqrs_rabbitmq || echo 'no container to delete'
+
+echo "--------- "
 echo "Setting up rabbitmq"
 
 # startup rethink db
