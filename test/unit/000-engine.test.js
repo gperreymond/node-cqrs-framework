@@ -28,7 +28,7 @@ describe('[unit] class engine', function () {
         expect(error).to.have.property('details')
         expect(error).to.have.property('code')
         expect(error.eraro).to.be.equal(true)
-        expect(error.code).to.be.equal('engine_error_no_bus')
+        expect(error.code).to.be.equal('engine_error_no_file')
         expect(error['cqrs-framework']).to.be.equal(true)
         expect(error.details).to.be.an('object')
         done()
@@ -37,7 +37,7 @@ describe('[unit] class engine', function () {
   it('should not initialize without rabbitmq', function (done) {
     let engine = new Engine({
       bus: {
-        url: 'amqp://666.666.666.666:666'
+        url: 'amqp://localhost:6666'
       },
       source: path.resolve(basedir, 'example/application'),
       patterns: ['**/*.js']
