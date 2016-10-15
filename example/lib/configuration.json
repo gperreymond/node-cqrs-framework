@@ -1,0 +1,7 @@
+{
+  "CQRS_RETHINKDB_PORT":28015,
+  "CQRS_RETHINKDB_DB":"test",
+  "CQRS_RETHINKDB_USER":"admin",
+  "CQRS_RETHINKDB_HOST":"localhost",
+  "CQRS_RABBITMQ_URL":"amqp://localhost:5672"
+}

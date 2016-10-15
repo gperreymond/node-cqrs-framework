@@ -4,13 +4,6 @@ logs
 npm-debug.log*
 *.queues
 
-# Docker
-rethinkdb.cqrs.json
-rabbitmq.cqrs.json
-
-# Configuration
-example/nconf.json
-
 # Runtime data
 pids
 *.pid

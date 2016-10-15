@@ -4,7 +4,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework/badge)](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework)  
 [![CircleCI](https://circleci.com/gh/gperreymond/node-cqrs-framework.svg?style=svg)](https://circleci.com/gh/gperreymond/node-cqrs-framework)
 
-node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures.
+node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures over rabbitmq service discovery.
 
 ## Description
 
@@ -29,27 +29,83 @@ Think better! Think KISS!
 $ npm i -S node-cqrs-framework
 ```
 
-## Prepare for development
-
-Il faut que __docker__ soit installé sur votre machine.  
-
-#### Démarrage des dockers sur la machine de development
-
-```
-$ npm run setup:deve
-```
-#### Containers list
-
-Voici la liste des __containers__ qui vont être utilisés et démarrés :
-
-- [x] rethinkdb:latest
-- [x] rabbitmq:management
-
-## Describe the projet
+## Description
 
 #### Engine
 
-C'est le chef d'orchestre du CQRS.
+The __engine__ is the main program, he needs to be start at first. Because the project is configuration-driven, you only need those lines of code to start all selected microservices in a row.
+
+```javascript
+'use strict'
+
+const path = require('path')
+const Engine = require('node-cqrs-framework').Engine
+
+const engine = new Engine({
+  source: path.resolve(__dirname, 'application'),
+  patterns: [
+    'domains/*/commands/*.js',
+    'domains/*/queries/*.js'
+  ]
+})
+
+console.log('engine on initialize')
+engine.initialize()
+  .then(() => {
+    console.log('engine has initialized')
+  })
+  .catch((error) => {
+    console.log(error)
+    process.exit(1)
+  })
+```
+
+#### Service
+
+A __service__ is the base element of the CQRS, see that like a microservice or a task. The resolution of a __service__ will automaticaly :
+
+- Send an event on the bus in case of success
+- Send an event on the bus in case of error
+
+You will never have to use this class, __Command__ and __Query__ extend it.
+
+#### Command
+
+A __command__ is a __service__ who gives back states instead of data. Those states are a success and an error.
+
+How to create a __Command__ ?
+
+- You need to create a file who contains __"Command"__ in his name
+- You need to __module.exports__ a promise
+
+And that's all folks, the __engine__ will make the rest for you.
+
+In this example, __CreateIndividualCommand.js__ will create a new entry in rethinkdb table __individuals__, after the data validation will succeed.
+
+```javascript
+'use strict'
+
+const Promise = require('bluebird')
+const Joi = require('joi')
+
+const rethinkdb = require('./lib/rethinkdb')
+const schema = require('./schema/individual')
+
+const handler = function (params = {}) {
+  return new Promise((resolve, reject) => {
+    Joi.validate(params, schema, (error) => {
+      if (error) { return reject(error) }
+      rethinkdb.service('individuals').create(params).then(resolve).catch(reject)
+    })
+  })
+}
+
+module.exports = handler
+```
+
+#### Query
+
+Une __query__ est un __service__ renvoyant des données ou un état (error).
 
 #### Trigger
 
@@ -70,33 +126,9 @@ Il existe deux types de __triggers__ :
 - __System__ : Générés automatiquement par de le démarrage de __engine__
 - __Custom__ : Les votres, faites vous plaisir
 
-#### Service
-
-Le __service__ est l'élément de base du CQRS, il faut le voir comme un __microservice__ ou une __task__.  
-La résolution d'un __service__ entraîne automatiquement :
-
-- L'emission d'un évènement sur le bus en cas de succès
-- L'emission d'un évènement sur le bus en cas de d'erreur
-
-Ces évènements sont générés automatiquement par le démarrage de __engine__ ; Vous n'avez rien à faire, ni à déclarer.
-
-Techniquement un __service__ c'est :
-
-- Un élément bas niveau
-- Un élément à ne jamais exposer directement
-- Un élément dont son handler est une promesse
-
-#### Command
-
-Une __command__ est un __service__ renvoyant un état (success ou error) et non des données.
-
-#### Query
-
-Une __query__ est un __service__ renvoyant des données ou un état (error).
-
 ## Architecture CQRS
 
-Vous avez un exemple assez large de tout ce que l'on peut faire dans le dossier __cqrs__ du projet.
+Vous avez un exemple assez large de tout ce que l'on peut faire dans le dossier __example__ du projet.
 
 - [x] Utilisation de rethinkdb sous forme de services via __feathers-rethinkdb__
 - [x] Un exemple de client utilisant directement le bus rabbitmq
@@ -107,20 +139,6 @@ Vous avez un exemple assez large de tout ce que l'on peut faire dans le dossier 
 #### Les fichiers sources
 
 Vous pouvez organiser votre architecture comme bon vous semble, il vous suffit de pointer vers les patterns de fichiers/dossiers souhaités, au format glob, lors du lancement de __engine__.
-
-```javascript
-'use strict'
-
-const Engine = require('node-cqrs-framework').Engine
-
-const engine = new Engine({
-  source: path.resolve(__dirname, '../../../..', 'cqrs'),
-  patterns: [
-    'domains/*/commands/*.js',
-    'domains/*/queries/*.js'
-  ]
-})
-```
 
 #### Création d'une commande
 
