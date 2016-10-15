@@ -95,8 +95,8 @@ describe('[integration] individuals life cycle', function () {
       })
       .catch(done)
   })
-  it('should send events on bus to create 10 individuals in a row', function (done) {
-    let current = 10
+  it('should send events on bus to create 2 individuals in a row', function (done) {
+    let current = 2
     engine.bus.subscribe('CreateIndividualCommand.Success', (event) => {
       current--
       if (current === 0) {
