@@ -6,7 +6,7 @@
   "scripts": {
     "setup:deve": "./script/setup-deve.sh",
     "start:deve": "DEBUG=cqrs:* node example/engine.js",
-    "test": "./test/run-all.sh",
+    "test": "npm run test:coverage",
     "test:standard": "node_modules/.bin/standard --verbose | snazzy",
     "test:unit": "node_modules/.bin/_mocha --timeout 5000 --use_strict --recursive test/unit",
     "test:integration": "node_modules/.bin/_mocha --timeout 5000 --use_strict --recursive test/integration",
@@ -47,14 +47,14 @@
     "istanbul": "0.4.5",
     "joi": "9.1.1",
     "mocha": "3.1.2",
+    "mocha-standard": "1.0.0",
     "rethinkdbdash": "2.3.23",
     "snazzy": "5.0.0",
     "standard": "8.4.0"
   },
   "standard": {
     "ignore": [
-      "coverage/**",
-      "docker/**"
+      "coverage/**"
     ]
   }
 }
