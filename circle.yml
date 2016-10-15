@@ -12,7 +12,7 @@ machine:
 
   node:
     version: 6.7.0
-    
+
   services:
     - docker
 
@@ -22,8 +22,8 @@ dependencies:
     - node_modules
 
   override:
-    - sh ./script/ci-bootstrap-rabbitmq
-    - sh ./script/ci-bootstrap-rethinkdb
+    - sh ./script/ci-bootstrap-rabbitmq.sh
+    - sh ./script/ci-bootstrap-rethinkdb.sh
 
 test:
 
