@@ -109,6 +109,7 @@ describe('[integration] FindIndividualsByEmailMatchingGmailQuery', function () {
       .catch(done)
   })
   it('should close all Rabbitmq', function (done) {
-    engine.exit().then(done)
+    engine.exit()
+    done()
   })
 })

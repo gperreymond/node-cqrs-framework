@@ -15,9 +15,9 @@ const handlerMockReject = function () {
 
 const handlerMockPublisher = function () {}
 
-describe('[unit] class engine', function () {
+describe.only('[unit] class engine', function () {
   it('should not initialize without rabbitmq', function (done) {
-    let engine = new Engine({
+    const engine = new Engine({
       connection: {
         port: 5680
       }
@@ -36,11 +36,11 @@ describe('[unit] class engine', function () {
         expect(error.code).to.be.equal('engine_error_no_bus_connected')
         expect(error['cqrs-framework']).to.be.equal(true)
         expect(error.details).to.be.an('object')
-        engine.exit().then(done).catch(done)
+        engine.exit().then(done)
       })
   })
   it('should not initialize without options', function (done) {
-    let engine = new Engine()
+    const engine = new Engine()
     engine.initialize()
       .then(() => {
         done(new Error('no error detected'))
@@ -55,11 +55,30 @@ describe('[unit] class engine', function () {
         expect(error.code).to.be.equal('engine_error_no_file')
         expect(error['cqrs-framework']).to.be.equal(true)
         expect(error.details).to.be.an('object')
-        engine.exit().then(done).catch(done)
+        engine.exit().then(done)
+      })
+  })
+  it('should not initialize because no files are found', function (done) {
+    let engine = new Engine({
+      source: 'no_files_here_to_initialize'
+    })
+    engine.initialize()
+      .then(() => {
+        done(new Error('no error detected'))
+      })
+      .catch((error) => {
+        expect(error).to.be.an('error')
+        expect(error).to.have.property('eraro')
+        expect(error).to.have.property('cqrs-framework')
+        expect(error).to.have.property('details')
+        expect(error.eraro).to.be.equal(true)
+        expect(error['cqrs-framework']).to.be.equal(true)
+        expect(error.details).to.be.an('object')
+        engine.exit().then(done)
       })
   })
   it('should use the execute and be rejected', function (done) {
-    let engine = new Engine()
+    const engine = new Engine()
     engine.services = {
       'HandlerMockReject': new Command('HandlerMockReject', handlerMockReject)
     }
@@ -79,27 +98,8 @@ describe('[unit] class engine', function () {
             expect(error.eraro).to.be.equal(true)
             expect(error['cqrs-framework']).to.be.equal(true)
             expect(error.details).to.be.an('object')
-            engine.exit().then(done).catch(done)
+            engine.exit().then(done)
           })
-      })
-  })
-  it('should not initialize because no files are found', function (done) {
-    let engine = new Engine({
-      source: 'no_files_here_to_initialize'
-    })
-    engine.initialize()
-      .then(() => {
-        done(new Error('no error detected'))
-      })
-      .catch((error) => {
-        expect(error).to.be.an('error')
-        expect(error).to.have.property('eraro')
-        expect(error).to.have.property('cqrs-framework')
-        expect(error).to.have.property('details')
-        expect(error.eraro).to.be.equal(true)
-        expect(error['cqrs-framework']).to.be.equal(true)
-        expect(error.details).to.be.an('object')
-        engine.exit().then(done).catch(done)
       })
   })
 })

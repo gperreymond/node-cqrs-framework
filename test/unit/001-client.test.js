@@ -6,14 +6,11 @@ const Client = require('../..').Client
 const chai = require('chai')
 const expect = chai.expect
 
-describe('[unit] class client', function () {
+describe.only('[unit] class client', function () {
   it('should not initialize without rabbitmq', function (done) {
-    let client = new Client({
+    const client = new Client({
       connection: {
-        host: 'localhost',
-        port: 6666,
-        timeout: 2000,
-        heartbeat: 10
+        port: 5680
       }
     })
     client.initialize()
@@ -30,14 +27,14 @@ describe('[unit] class client', function () {
         expect(error.code).to.be.equal('client_error_no_bus_connected')
         expect(error['cqrs-framework']).to.be.equal(true)
         expect(error.details).to.be.an('object')
-        done()
+        client.exit().then(done)
       })
   })
-  it('should start', function (done) {
-    let client = new Client()
+  it('should initialize', function (done) {
+    const client = new Client()
     client.initialize()
       .then(() => {
-        done()
+        client.exit().then(done)
       })
       .catch(done)
   })

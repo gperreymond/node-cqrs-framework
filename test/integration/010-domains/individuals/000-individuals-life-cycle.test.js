@@ -13,6 +13,9 @@ const engine = new Engine({
   patterns: ['**/*.js']
 })
 
+const Client = require(basedir).Client
+const client = new Client()
+
 let data
 var Chance = require('chance')
 var chance = new Chance()
@@ -113,7 +116,15 @@ describe('[integration] individuals life cycle', function () {
       })
       .catch(done)
   })
+  it('should use a client to find some individuals', function (done) {
+    client.initialize()
+      .then(() => {
+        done()
+      })
+      .catch(done)
+  })
   it('should close all Rabbitmq', function (done) {
-    engine.exit().then(done)
+    engine.exit()
+    done()
   })
 })
