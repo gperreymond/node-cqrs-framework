@@ -8,19 +8,13 @@ const expect = chai.expect
 const basedir = path.resolve(__dirname, '../../../../..')
 
 const Engine = require(basedir).Engine
-const config = require(path.resolve(basedir, 'example/lib/config'))
-
-let engine
+const engine = new Engine({
+  source: path.resolve(basedir, 'example/application'),
+  patterns: ['**/*.js']
+})
 
 describe('[integration] GroupIndividualsByEmailDomainExcludeMinimumQuery', function () {
   it('should initialize Engine', function (done) {
-    engine = new Engine({
-      bus: {
-        url: config.get('CQRS_RABBITMQ_URL')
-      },
-      source: path.resolve(basedir, 'example/application'),
-      patterns: ['**/*.js']
-    })
     engine.initialize()
     .then(() => {
       expect(engine).to.be.an('object')
@@ -52,5 +46,8 @@ describe('[integration] GroupIndividualsByEmailDomainExcludeMinimumQuery', funct
         done()
       })
       .catch(done)
+  })
+  it('should close all Rabbitmq', function (done) {
+    engine.exit().then(done)
   })
 })

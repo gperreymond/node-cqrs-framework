@@ -4,11 +4,8 @@
 const Engine = require('../..').Engine
 const Command = require('../..').Command
 
-const path = require('path')
 const chai = require('chai')
 const expect = chai.expect
-
-const basedir = path.resolve(__dirname, '../..')
 
 const handlerMockReject = function () {
   return new Promise((resolve, reject) => {
@@ -16,34 +13,14 @@ const handlerMockReject = function () {
   })
 }
 
+const handlerMockPublisher = function () {}
+
 describe('[unit] class engine', function () {
-  it.only('should not initialize without options', function (done) {
-    let engine = new Engine()
-    engine.initialize()
-      .then(() => {
-        done(new Error('no error detected'))
-      })
-      .catch((error) => {
-        expect(error).to.be.an('error')
-        expect(error).to.have.property('eraro')
-        expect(error).to.have.property('cqrs-framework')
-        expect(error).to.have.property('details')
-        expect(error).to.have.property('code')
-        expect(error.eraro).to.be.equal(true)
-        expect(error.code).to.be.equal('engine_error_no_file')
-        expect(error['cqrs-framework']).to.be.equal(true)
-        expect(error.details).to.be.an('object')
-        done()
-      })
-  })
-  it.only('should not initialize without rabbitmq', function (done) {
+  it('should not initialize without rabbitmq', function (done) {
     let engine = new Engine({
       connection: {
-        host: 'localhost',
-        port: 6500
-      },
-      source: path.resolve(basedir, 'example/application'),
-      patterns: ['**/commands/**/*.js']
+        port: 5680
+      }
     })
     engine.initialize()
       .then(() => {
@@ -59,44 +36,70 @@ describe('[unit] class engine', function () {
         expect(error.code).to.be.equal('engine_error_no_bus_connected')
         expect(error['cqrs-framework']).to.be.equal(true)
         expect(error.details).to.be.an('object')
-        done()
+        engine.exit().then(done).catch(done)
+      })
+  })
+  it('should not initialize without options', function (done) {
+    let engine = new Engine()
+    engine.initialize()
+      .then(() => {
+        done(new Error('no error detected'))
+      })
+      .catch((error) => {
+        expect(error).to.be.an('error')
+        expect(error).to.have.property('eraro')
+        expect(error).to.have.property('cqrs-framework')
+        expect(error).to.have.property('details')
+        expect(error).to.have.property('code')
+        expect(error.eraro).to.be.equal(true)
+        expect(error.code).to.be.equal('engine_error_no_file')
+        expect(error['cqrs-framework']).to.be.equal(true)
+        expect(error.details).to.be.an('object')
+        engine.exit().then(done).catch(done)
       })
   })
   it('should use the execute and be rejected', function (done) {
     let engine = new Engine()
     engine.services = {
-      'handlerMockReject': new Command('handlerMockReject', handlerMockReject)
+      'HandlerMockReject': new Command('HandlerMockReject', handlerMockReject)
     }
-    engine.bus = {
-      publish (name, handler) {
-        return null
+    engine.publishers = {
+      'HandlerMockReject.Error': {
+        publish: handlerMockPublisher
       }
     }
-    engine.execute('handlerMockReject')
-    .catch((error) => {
-      expect(error).to.be.an('error')
-      expect(error).to.have.property('eraro')
-      expect(error).to.have.property('cqrs-framework')
-      expect(error).to.have.property('details')
-      expect(error.eraro).to.be.equal(true)
-      expect(error['cqrs-framework']).to.be.equal(true)
-      expect(error.details).to.be.an('object')
-      done()
-    })
+    engine.initialize()
+      .catch(() => {
+        engine.execute('HandlerMockReject')
+          .catch((error) => {
+            expect(error).to.be.an('error')
+            expect(error).to.have.property('eraro')
+            expect(error).to.have.property('cqrs-framework')
+            expect(error).to.have.property('details')
+            expect(error.eraro).to.be.equal(true)
+            expect(error['cqrs-framework']).to.be.equal(true)
+            expect(error.details).to.be.an('object')
+            engine.exit().then(done).catch(done)
+          })
+      })
   })
   it('should not initialize because no files are found', function (done) {
     let engine = new Engine({
       source: 'no_files_here_to_initialize'
     })
-    engine.initialize().catch((error) => {
-      expect(error).to.be.an('error')
-      expect(error).to.have.property('eraro')
-      expect(error).to.have.property('cqrs-framework')
-      expect(error).to.have.property('details')
-      expect(error.eraro).to.be.equal(true)
-      expect(error['cqrs-framework']).to.be.equal(true)
-      expect(error.details).to.be.an('object')
-      done()
-    })
+    engine.initialize()
+      .then(() => {
+        done(new Error('no error detected'))
+      })
+      .catch((error) => {
+        expect(error).to.be.an('error')
+        expect(error).to.have.property('eraro')
+        expect(error).to.have.property('cqrs-framework')
+        expect(error).to.have.property('details')
+        expect(error.eraro).to.be.equal(true)
+        expect(error['cqrs-framework']).to.be.equal(true)
+        expect(error.details).to.be.an('object')
+        engine.exit().then(done).catch(done)
+      })
   })
 })

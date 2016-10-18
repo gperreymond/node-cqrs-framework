@@ -9,8 +9,11 @@ const expect = chai.expect
 describe('[unit] class client', function () {
   it('should not initialize without rabbitmq', function (done) {
     let client = new Client({
-      bus: {
-        url: 'amqp://localhost:6666'
+      connection: {
+        host: 'localhost',
+        port: 6666,
+        timeout: 2000,
+        heartbeat: 10
       }
     })
     client.initialize()

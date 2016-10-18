@@ -1,7 +1,6 @@
 /* global describe:false, it:false */
 'use strict'
 
-const uuid = require('uuid')
 const path = require('path')
 const chai = require('chai')
 const expect = chai.expect
@@ -9,22 +8,17 @@ const expect = chai.expect
 const basedir = path.resolve(__dirname, '../../../..')
 
 const Engine = require(basedir).Engine
-const config = require(path.resolve(basedir, 'example/lib/config'))
+const engine = new Engine({
+  source: path.resolve(basedir, 'example/application'),
+  patterns: ['**/*.js']
+})
 
-let engine
 let data
 var Chance = require('chance')
 var chance = new Chance()
 
 describe('[integration] individuals life cycle', function () {
   it('should initialize Engine', function (done) {
-    engine = new Engine({
-      bus: {
-        url: config.get('CQRS_RABBITMQ_URL')
-      },
-      source: path.resolve(basedir, 'example/application'),
-      patterns: ['**/*.js']
-    })
     engine.initialize()
       .then(() => {
         expect(engine).to.be.an('object')
@@ -119,28 +113,7 @@ describe('[integration] individuals life cycle', function () {
       })
       .catch(done)
   })
-  it('should find some individuals with a requester', function (done) {
-    let q = {
-      requester: uuid.v4(),
-      email: data.email
-    }
-    engine.execute('FindIndividualsQuery', q)
-      .then(function (result) {
-        expect(result).to.be.an('object')
-        expect(result).to.have.property('uuid')
-        expect(result).to.have.property('type')
-        expect(result).to.have.property('name')
-        expect(result).to.have.property('exectime')
-        expect(result).to.have.property('result')
-        expect(result.uuid).to.be.a('string')
-        expect(result.type).to.be.a('string')
-        expect(result.name).to.be.a('string')
-        expect(result.exectime).to.be.a('number')
-        expect(result.result).to.be.an('object')
-        expect(result.result).to.have.property('total')
-        expect(result.result.total).to.be.a('number')
-        done()
-      })
-      .catch(done)
+  it('should close all Rabbitmq', function (done) {
+    engine.exit().then(done)
   })
 })
