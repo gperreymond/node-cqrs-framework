@@ -17,7 +17,7 @@ const handlerMockReject = function () {
 }
 
 describe('[unit] class engine', function () {
-  it('should not initialize without options', function (done) {
+  it.only('should not initialize without options', function (done) {
     let engine = new Engine()
     engine.initialize()
       .then(() => {
@@ -36,13 +36,14 @@ describe('[unit] class engine', function () {
         done()
       })
   })
-  it('should not initialize without rabbitmq', function (done) {
+  it.only('should not initialize without rabbitmq', function (done) {
     let engine = new Engine({
-      bus: {
-        url: 'amqp://localhost:6666'
+      connection: {
+        host: 'localhost',
+        port: 6500
       },
       source: path.resolve(basedir, 'example/application'),
-      patterns: ['**/*.js']
+      patterns: ['**/commands/**/*.js']
     })
     engine.initialize()
       .then(() => {
