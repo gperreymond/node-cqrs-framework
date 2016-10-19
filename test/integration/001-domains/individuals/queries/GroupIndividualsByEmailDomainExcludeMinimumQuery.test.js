@@ -7,28 +7,28 @@ const expect = chai.expect
 
 const basedir = path.resolve(__dirname, '../../../../..')
 
-const Engine = require(basedir).Engine
-const engine = new Engine({
+const Server = require(basedir).Server
+const server = new Server({
   source: path.resolve(basedir, 'example/application'),
   patterns: ['**/*.js']
 })
 
 describe('[integration] GroupIndividualsByEmailDomainExcludeMinimumQuery', function () {
-  it('should initialize Engine', function (done) {
-    engine.initialize()
+  it('should initialize Server', function (done) {
+    server.initialize()
     .then(() => {
-      expect(engine).to.be.an('object')
-      expect(engine).to.have.property('options')
-      expect(engine).to.have.property('starttime')
-      expect(engine).to.have.property('uuid')
-      expect(engine.options).to.be.an('object')
-      expect(engine.uuid).to.be.a('string')
-      expect(engine.starttime).to.be.a('number')
+      expect(server).to.be.an('object')
+      expect(server).to.have.property('options')
+      expect(server).to.have.property('starttime')
+      expect(server).to.have.property('uuid')
+      expect(server.options).to.be.an('object')
+      expect(server.uuid).to.be.a('string')
+      expect(server.starttime).to.be.a('number')
       done()
     })
   })
   it('should success', function (done) {
-    engine.execute('GroupIndividualsByEmailDomainExcludeMinimumQuery')
+    server.execute('GroupIndividualsByEmailDomainExcludeMinimumQuery')
       .then(function (result) {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
@@ -46,9 +46,5 @@ describe('[integration] GroupIndividualsByEmailDomainExcludeMinimumQuery', funct
         done()
       })
       .catch(done)
-  })
-  it('should close all Rabbitmq', function (done) {
-    engine.exit()
-    done()
   })
 })

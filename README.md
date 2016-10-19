@@ -30,17 +30,17 @@ $ npm i -S node-cqrs-framework
 
 ## Description
 
-#### Engine
+#### Server
 
-The __engine__ is the main program, he needs to be start at first. Because the project is configuration-driven, you only need those lines of code to start all selected microservices in a row.
+The __server__ is the main program, he needs to be start at first. Because the project is configuration-driven, you only need those lines of code to start all selected microservices in a row.
 
 ```javascript
 'use strict'
 
 const path = require('path')
-const Engine = require('node-cqrs-framework').Engine
+const Server = require('node-cqrs-framework').Server
 
-const engine = new Engine({
+const server = new Server({
   source: path.resolve(__dirname, 'application'),
   patterns: [
     'domains/**/commands/*.js',
@@ -48,11 +48,11 @@ const engine = new Engine({
   ]
 })
 
-console.log('engine on initialize')
-engine.initialize()
+console.log('server on initialize')
+server.initialize()
   .then(() => {
-    console.log('engine has initialized')
-    console.log(engine)
+    console.log('server has initialized')
+    console.log(server)
   })
   .catch((error) => {
     console.log(error)
@@ -99,17 +99,17 @@ module.exports = handler
 ```
 
 * Step 3
-> Now it's time to start the engine, you need a rabbitmq running in localhost for this example.
+> Now it's time to start the server, you need a rabbitmq running in localhost for this example.
 
 
 ```
-$ node engine.js
+$ node server.js
 ```
 
-As result you will see the architecture of the engine :  
+As result you will see the architecture of the server :  
 
 ```
-Engine {
+Server {
   uuid: '77fdde42-4273-4142-b09e-e4883256fa3c',
   options:
    { bus: { url: 'amqp://localhost:5672' },
@@ -132,7 +132,7 @@ Engine {
         uuid: '40d5ad0b-b669-4199-bd5c-b347da91fdbb',
         type: 'Trigger',
         name: 'BasicNopeCommand',
-        engine: [Circular] } },
+        server: [Circular] } },
   error: { [Function: errormaker] callpoint: [Function: callpoint] },
   bus:
    RabbitMQBus {
@@ -141,7 +141,7 @@ Engine {
 }
 ```
 
-Now, you have a client who consume the engine (we will see later how to implement this).  
+Now, you have a client who consume the server (we will see later how to implement this).  
 If you subscribe to : __BasicNopeCommand.Success__, you have this in return :
 
 ```
@@ -162,7 +162,7 @@ If you subscribe to : __BasicNopeCommand.Success__, you have this in return :
 - You need to create a file who contains __"Command"__ in his name
 - You need to __module.exports__ a promise
 
-And that's all folks, the __engine__ will make the rest for you.
+And that's all folks, the __server__ will make the rest for you.
 
 In this example, __CreateIndividualCommand.js__ will create a new entry in rethinkdb table __individuals__, after the data validation will succeed.
 
@@ -207,7 +207,7 @@ Un __trigger__ peut être :
 
 Il existe deux types de __triggers__ :
 
-- __System__ : Générés automatiquement par de le démarrage de __engine__
+- __System__ : Générés automatiquement par de le démarrage de __server__
 - __Custom__ : Les votres, faites vous plaisir
 
 ## Architecture CQRS
@@ -222,4 +222,4 @@ Vous avez un exemple assez large de tout ce que l'on peut faire dans le dossier 
 
 #### Les fichiers sources
 
-Vous pouvez organiser votre architecture comme bon vous semble, il vous suffit de pointer vers les patterns de fichiers/dossiers souhaités, au format glob, lors du lancement de __engine__.
+Vous pouvez organiser votre architecture comme bon vous semble, il vous suffit de pointer vers les patterns de fichiers/dossiers souhaités, au format glob, lors du lancement de __server__.

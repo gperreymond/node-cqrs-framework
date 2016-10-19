@@ -7,30 +7,27 @@ const expect = chai.expect
 
 const basedir = path.resolve(__dirname, '../../../..')
 
-const Engine = require(basedir).Engine
-const engine = new Engine({
+const Server = require(basedir).Server
+const server = new Server({
   source: path.resolve(basedir, 'example/application'),
   patterns: ['**/*.js']
 })
-
-const Client = require(basedir).Client
-const client = new Client()
 
 let data
 var Chance = require('chance')
 var chance = new Chance()
 
 describe('[integration] individuals life cycle', function () {
-  it('should initialize Engine', function (done) {
-    engine.initialize()
+  it('should initialize Server', function (done) {
+    server.initialize()
       .then(() => {
-        expect(engine).to.be.an('object')
-        expect(engine).to.have.property('options')
-        expect(engine).to.have.property('starttime')
-        expect(engine).to.have.property('uuid')
-        expect(engine.options).to.be.an('object')
-        expect(engine.uuid).to.be.a('string')
-        expect(engine.starttime).to.be.a('number')
+        expect(server).to.be.an('object')
+        expect(server).to.have.property('options')
+        expect(server).to.have.property('starttime')
+        expect(server).to.have.property('uuid')
+        expect(server.options).to.be.an('object')
+        expect(server.uuid).to.be.a('string')
+        expect(server.starttime).to.be.a('number')
         done()
       })
       .catch(done)
@@ -39,7 +36,7 @@ describe('[integration] individuals life cycle', function () {
     data = {
       email: true
     }
-    engine.execute('CreateIndividualCommand', data)
+    server.execute('CreateIndividualCommand', data)
       .catch((error) => {
         expect(error).to.be.an('error')
         expect(error).to.have.property('eraro')
@@ -55,8 +52,8 @@ describe('[integration] individuals life cycle', function () {
     data = {
       email: chance.email({domain: 'gmail.com'})
     }
-    engine.execute('CreateIndividualCommand', data)
-      .then(function (result) {
+    server.execute('CreateIndividualCommand', data)
+      .then((result) => {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
         expect(result).to.have.property('type')
@@ -75,8 +72,8 @@ describe('[integration] individuals life cycle', function () {
       .catch(done)
   })
   it('should get individual', function (done) {
-    engine.execute('GetIndividualByIdQuery', data.id)
-      .then(function (result) {
+    server.execute('GetIndividualByIdQuery', data.id)
+      .then((result) => {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
         expect(result).to.have.property('type')
@@ -97,8 +94,8 @@ describe('[integration] individuals life cycle', function () {
     let q = {
       email: data.email
     }
-    engine.execute('FindIndividualsQuery', q)
-      .then(function (result) {
+    server.execute('FindIndividualsQuery', q)
+      .then((result) => {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
         expect(result).to.have.property('type')
@@ -115,16 +112,5 @@ describe('[integration] individuals life cycle', function () {
         done()
       })
       .catch(done)
-  })
-  it('should use a client to find some individuals', function (done) {
-    client.initialize()
-      .then(() => {
-        done()
-      })
-      .catch(done)
-  })
-  it('should close all Rabbitmq', function (done) {
-    engine.exit()
-    done()
   })
 })
