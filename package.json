@@ -1,6 +1,6 @@
 {
   "name": "node-cqrs-framework",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "description": "Do not use, research only.",
   "main": "index.js",
   "scripts": {
@@ -34,7 +34,8 @@
     "hoek": "4.1.0",
     "lodash": "4.16.4",
     "nconf": "0.8.4",
-    "servicebus": "2.0.5",
+    "rabbot": "1.0.6",
+    "rabbus": "0.8.2",
     "uuid": "2.0.3"
   },
   "devDependencies": {
@@ -43,7 +44,7 @@
     "feathers-query-filters": "2.1.1",
     "feathers-rethinkdb": "0.2.8",
     "istanbul": "0.4.5",
-    "joi": "9.1.1",
+    "joi": "9.2.0",
     "mocha": "3.1.2",
     "mocha-standard": "1.0.0",
     "rethinkdbdash": "2.3.23",

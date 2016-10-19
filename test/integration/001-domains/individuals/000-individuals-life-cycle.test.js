@@ -1,39 +1,33 @@
 /* global describe:false, it:false */
 'use strict'
 
-const uuid = require('uuid')
 const path = require('path')
 const chai = require('chai')
 const expect = chai.expect
 
 const basedir = path.resolve(__dirname, '../../../..')
 
-const Engine = require(basedir).Engine
-const config = require(path.resolve(basedir, 'example/lib/config'))
+const Server = require(basedir).Server
+const server = new Server({
+  source: path.resolve(basedir, 'example/application'),
+  patterns: ['**/*.js']
+})
 
-let engine
 let data
 var Chance = require('chance')
 var chance = new Chance()
 
 describe('[integration] individuals life cycle', function () {
-  it('should initialize Engine', function (done) {
-    engine = new Engine({
-      bus: {
-        url: config.get('CQRS_RABBITMQ_URL')
-      },
-      source: path.resolve(basedir, 'example/application'),
-      patterns: ['**/*.js']
-    })
-    engine.initialize()
+  it('should initialize Server', function (done) {
+    server.initialize()
       .then(() => {
-        expect(engine).to.be.an('object')
-        expect(engine).to.have.property('options')
-        expect(engine).to.have.property('starttime')
-        expect(engine).to.have.property('uuid')
-        expect(engine.options).to.be.an('object')
-        expect(engine.uuid).to.be.a('string')
-        expect(engine.starttime).to.be.a('number')
+        expect(server).to.be.an('object')
+        expect(server).to.have.property('options')
+        expect(server).to.have.property('starttime')
+        expect(server).to.have.property('uuid')
+        expect(server.options).to.be.an('object')
+        expect(server.uuid).to.be.a('string')
+        expect(server.starttime).to.be.a('number')
         done()
       })
       .catch(done)
@@ -42,7 +36,7 @@ describe('[integration] individuals life cycle', function () {
     data = {
       email: true
     }
-    engine.execute('CreateIndividualCommand', data)
+    server.execute('CreateIndividualCommand', data)
       .catch((error) => {
         expect(error).to.be.an('error')
         expect(error).to.have.property('eraro')
@@ -58,8 +52,8 @@ describe('[integration] individuals life cycle', function () {
     data = {
       email: chance.email({domain: 'gmail.com'})
     }
-    engine.execute('CreateIndividualCommand', data)
-      .then(function (result) {
+    server.execute('CreateIndividualCommand', data)
+      .then((result) => {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
         expect(result).to.have.property('type')
@@ -78,8 +72,8 @@ describe('[integration] individuals life cycle', function () {
       .catch(done)
   })
   it('should get individual', function (done) {
-    engine.execute('GetIndividualByIdQuery', data.id)
-      .then(function (result) {
+    server.execute('GetIndividualByIdQuery', data.id)
+      .then((result) => {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
         expect(result).to.have.property('type')
@@ -100,32 +94,8 @@ describe('[integration] individuals life cycle', function () {
     let q = {
       email: data.email
     }
-    engine.execute('FindIndividualsQuery', q)
-      .then(function (result) {
-        expect(result).to.be.an('object')
-        expect(result).to.have.property('uuid')
-        expect(result).to.have.property('type')
-        expect(result).to.have.property('name')
-        expect(result).to.have.property('exectime')
-        expect(result).to.have.property('result')
-        expect(result.uuid).to.be.a('string')
-        expect(result.type).to.be.a('string')
-        expect(result.name).to.be.a('string')
-        expect(result.exectime).to.be.a('number')
-        expect(result.result).to.be.an('object')
-        expect(result.result).to.have.property('total')
-        expect(result.result.total).to.be.a('number')
-        done()
-      })
-      .catch(done)
-  })
-  it('should find some individuals with a requester', function (done) {
-    let q = {
-      requester: uuid.v4(),
-      email: data.email
-    }
-    engine.execute('FindIndividualsQuery', q)
-      .then(function (result) {
+    server.execute('FindIndividualsQuery', q)
+      .then((result) => {
         expect(result).to.be.an('object')
         expect(result).to.have.property('uuid')
         expect(result).to.have.property('type')

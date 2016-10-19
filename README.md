@@ -1,8 +1,7 @@
 # node-cqrs-framework
 
-[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
-[![CodeFactor](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework/badge)](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework)  
-[![CircleCI](https://circleci.com/gh/gperreymond/node-cqrs-framework.svg?style=svg)](https://circleci.com/gh/gperreymond/node-cqrs-framework)
+* [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) [![CodeFactor](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework/badge)](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework)  
+* [![CircleCI](https://circleci.com/gh/gperreymond/node-cqrs-framework.svg?style=svg)](https://circleci.com/gh/gperreymond/node-cqrs-framework)
 
 node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures over rabbitmq service discovery.
 
@@ -31,28 +30,29 @@ $ npm i -S node-cqrs-framework
 
 ## Description
 
-#### Engine
+#### Server
 
-The __engine__ is the main program, he needs to be start at first. Because the project is configuration-driven, you only need those lines of code to start all selected microservices in a row.
+The __server__ is the main program, he needs to be start at first. Because the project is configuration-driven, you only need those lines of code to start all selected microservices in a row.
 
 ```javascript
 'use strict'
 
 const path = require('path')
-const Engine = require('node-cqrs-framework').Engine
+const Server = require('node-cqrs-framework').Server
 
-const engine = new Engine({
+const server = new Server({
   source: path.resolve(__dirname, 'application'),
   patterns: [
-    'domains/*/commands/*.js',
-    'domains/*/queries/*.js'
+    'domains/**/commands/*.js',
+    'domains/**/queries/*.js'
   ]
 })
 
-console.log('engine on initialize')
-engine.initialize()
+console.log('server on initialize')
+server.initialize()
   .then(() => {
-    console.log('engine has initialized')
+    console.log('server has initialized')
+    console.log(server)
   })
   .catch((error) => {
     console.log(error)
@@ -62,7 +62,7 @@ engine.initialize()
 
 #### Service
 
-A __service__ is the base element of the CQRS, see that like a microservice or a task. The resolution of a __service__ will automaticaly :
+A __service__ is the base element of the CQRS, it's like a microservice or a task. The application result of a __service__ will automaticaly :
 
 - Send an event on the bus in case of success
 - Send an event on the bus in case of error
@@ -71,14 +71,98 @@ You will never have to use this class, __Command__ and __Query__ extend it.
 
 #### Command
 
-A __command__ is a __service__ who gives back states instead of data. Those states are a success and an error.
+* "A result" is either a successful application of the command, or an exception.
+* Because it extends __Service__, success event or error event will be automaticaly send on the bus.
+* You can as many events you need in case of success and/or error
 
 How to create a __Command__ ?
+
+* Step 1
+> You need to create a file who contains __"Command"__ in his name.  
+> __path/you/want/BasicNopeCommand.js__
+
+* Step 2
+> You need to __module.exports__ a promise.  
+
+```javascript
+'use strict'
+
+const Promise = require('bluebird')
+
+const handler = function () {
+  return new Promise((resolve, reject) => {
+    resolve()
+  })
+}
+
+module.exports = handler
+```
+
+* Step 3
+> Now it's time to start the server, you need a rabbitmq running in localhost for this example.
+
+
+```
+$ node server.js
+```
+
+As result you will see the architecture of the server :  
+
+```
+Server {
+  uuid: '77fdde42-4273-4142-b09e-e4883256fa3c',
+  options:
+   { bus: { url: 'amqp://localhost:5672' },
+     source: '/home/gperreymond/Workspaces/abibao-cqrs-monolith/application',
+     patterns: [ 'domains/**/commands/*.js', 'domains/**/queries/*.js' ] },
+  starttime: 1476609320317,
+  services:
+   { BasicNopeCommand:
+      Command {
+        uuid: 'cab57059-5d8c-4582-9742-a3beb77aa342',
+        error: [Object],
+        type: 'Command',
+        name: 'BasicNopeCommand',
+        EventSuccess: 'BasicNopeCommand.Success',
+        EventError: 'BasicNopeCommand.Error',
+        handler: [Function: handler] } },
+  triggers:
+   { BasicNopeCommand:
+      Trigger {
+        uuid: '40d5ad0b-b669-4199-bd5c-b347da91fdbb',
+        type: 'Trigger',
+        name: 'BasicNopeCommand',
+        server: [Circular] } },
+  error: { [Function: errormaker] callpoint: [Function: callpoint] },
+  bus:
+   RabbitMQBus {
+     ...
+   }
+}
+```
+
+Now, you have a client who consume the server (we will see later how to implement this).  
+If you subscribe to : __BasicNopeCommand.Success__, you have this in return :
+
+```
+
+```
+
+
+
+
+
+
+
+
+
+
+
 
 - You need to create a file who contains __"Command"__ in his name
 - You need to __module.exports__ a promise
 
-And that's all folks, the __engine__ will make the rest for you.
+And that's all folks, the __server__ will make the rest for you.
 
 In this example, __CreateIndividualCommand.js__ will create a new entry in rethinkdb table __individuals__, after the data validation will succeed.
 
@@ -123,7 +207,7 @@ Un __trigger__ peut être :
 
 Il existe deux types de __triggers__ :
 
-- __System__ : Générés automatiquement par de le démarrage de __engine__
+- __System__ : Générés automatiquement par de le démarrage de __server__
 - __Custom__ : Les votres, faites vous plaisir
 
 ## Architecture CQRS
@@ -138,24 +222,4 @@ Vous avez un exemple assez large de tout ce que l'on peut faire dans le dossier 
 
 #### Les fichiers sources
 
-Vous pouvez organiser votre architecture comme bon vous semble, il vous suffit de pointer vers les patterns de fichiers/dossiers souhaités, au format glob, lors du lancement de __engine__.
-
-#### Création d'une commande
-
-- Le nom du fichier doit contenir __Command__
-- Le chemin n'a pas d'importance
-- Le __handler__ doit être une promesse
-
-```javascript
-'use strict'
-
-const Promise = require('bluebird')
-
-const handler = function (params = {}) {
-  return new Promise((resolve, reject) => {
-    resolve({debug: true})
-  })
-}
-
-module.exports = handler
-```
+Vous pouvez organiser votre architecture comme bon vous semble, il vous suffit de pointer vers les patterns de fichiers/dossiers souhaités, au format glob, lors du lancement de __server__.

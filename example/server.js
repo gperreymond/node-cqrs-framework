@@ -2,19 +2,20 @@
 
 const path = require('path')
 
-const Engine = require('./..').Engine
+const Server = require('./..').Server
 const config = require('./lib/config')
 
-const engine = new Engine({
-  bus: {
-    url: config.get('CQRS_RABBITMQ_URL')
+const server = new Server({
+  connection: {
+    host: config.get('CQRS_RABBITMQ_HOST'),
+    port: config.get('CQRS_RABBITMQ_PORT')
   },
   source: path.resolve(__dirname, 'application'),
   patterns: require('./patterns')
 })
 
-console.log('engine on initialize')
-engine.initialize()
+console.log('server on initialize')
+server.initialize()
   .then(() => {
     console.log('engine has initialized')
   })

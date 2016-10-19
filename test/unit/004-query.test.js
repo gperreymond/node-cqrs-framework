@@ -19,7 +19,7 @@ const handlerMockReject = function () {
 }
 
 describe('[unit] class query', function () {
-  it('should create a new Query', function (done) {
+  it('should be instancied', function (done) {
     let query = new Query('TestUnitQuery', handlerMockResolve)
     expect(query).to.be.an('object')
     expect(query).to.have.property('uuid')
