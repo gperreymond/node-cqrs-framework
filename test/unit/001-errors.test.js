@@ -1,4 +1,3 @@
-/* global describe:false, it:false */
 'use strict'
 
 const Server = require('../..').Server
@@ -75,7 +74,7 @@ describe('[unit] errors', function () {
         port: 5680
       }
     })
-    client.send('NopeCommand', {})
+    client.initialize()
       .then(() => {
         done(new Error('no error detected'))
       })

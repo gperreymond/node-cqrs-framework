@@ -1,5 +1,6 @@
-/* global describe:false, it:false, before: false */
 'use strict'
+
+const Promise = require('bluebird')
 
 const Server = require('../..').Server
 const Client = require('../..').Client
@@ -15,8 +16,21 @@ const server = new Server({
   patterns: ['**/*.js']
 })
 const client = new Client()
-client.subscribe('CreateIndividualCommand.Success')
-client.subscribe('CreateIndividualCommand.Error')
+
+const initializers = function () {
+  return new Promise((resolve, reject) => {
+    server.initialize()
+      .then(() => {
+        return client.initialize()
+      })
+      .then(() => {
+        client.subscribe('CreateIndividualCommand.Success')
+        client.subscribe('CreateIndividualCommand.Error')
+        resolve()
+      })
+      .catch(reject)
+  })
+}
 
 const handlerSuccess = function (result) {
   client.trigger.removeListener('CreateIndividualCommand.Success', handlerSuccess)
@@ -27,8 +41,8 @@ const handlerError = function (result) {
 }
 
 describe('[integration] client/server tests', function () {
-  before(function () {
-    server.initialize()
+  it('should prepare initializations', function (done) {
+    initializers().then(done).catch(done)
   })
   it('should success in client.send(action, data)', function (done) {
     client.trigger.on('CreateIndividualCommand.Success', handlerSuccess)

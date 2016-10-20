@@ -3,7 +3,8 @@
 * [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) [![CodeFactor](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework/badge)](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework)  
 * [![CircleCI](https://circleci.com/gh/gperreymond/node-cqrs-framework.svg?style=svg)](https://circleci.com/gh/gperreymond/node-cqrs-framework)
 
-node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures over rabbitmq service discovery.
+node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures over rabbitmq service discovery.  
+node-cqrs-framework use the powerfull Rabbus (https://github.com/derickbailey/rabbus) and Rabbitmq.
 
 ## Description
 
@@ -29,6 +30,8 @@ $ npm i -S node-cqrs-framework
 ```
 
 ## Description
+
+Beware, you need a rabbitmq running in localhost for all those examples.
 
 #### Server
 
@@ -62,7 +65,7 @@ server.initialize()
 
 #### Service
 
-A __service__ is the base element of the CQRS, it's like a microservice or a task. The application result of a __service__ will automaticaly :
+A __service__ is the base element of the CQRS, it's like a microservice or a task. The application result of a __service__ will automaticaly:
 
 - Send an event on the bus in case of success
 - Send an event on the bus in case of error
@@ -73,7 +76,6 @@ You will never have to use this class, __Command__ and __Query__ extend it.
 
 * "A result" is either a successful application of the command, or an exception.
 * Because it extends __Service__, success event or error event will be automaticaly send on the bus.
-* You can as many events you need in case of success and/or error
 
 How to create a __Command__ ?
 
@@ -98,128 +100,243 @@ const handler = function () {
 module.exports = handler
 ```
 
-* Step 3
-> Now it's time to start the server, you need a rabbitmq running in localhost for this example.
+#### Query
 
+From the framework point of view a __query__ is the same as a __command__, but because of __queries__ roles in the CQRS architecture, this time data will be return.
 
-```
-$ node server.js
-```
+* "A result" is either data, or an exception
+* Because it extends __Service__, success event or error event will be automaticaly send on the bus
 
-As result you will see the architecture of the server :  
+How to create a __Query__ ?
 
-```
-Server {
-  uuid: '77fdde42-4273-4142-b09e-e4883256fa3c',
-  options:
-   { bus: { url: 'amqp://localhost:5672' },
-     source: '/home/gperreymond/Workspaces/abibao-cqrs-monolith/application',
-     patterns: [ 'domains/**/commands/*.js', 'domains/**/queries/*.js' ] },
-  starttime: 1476609320317,
-  services:
-   { BasicNopeCommand:
-      Command {
-        uuid: 'cab57059-5d8c-4582-9742-a3beb77aa342',
-        error: [Object],
-        type: 'Command',
-        name: 'BasicNopeCommand',
-        EventSuccess: 'BasicNopeCommand.Success',
-        EventError: 'BasicNopeCommand.Error',
-        handler: [Function: handler] } },
-  triggers:
-   { BasicNopeCommand:
-      Trigger {
-        uuid: '40d5ad0b-b669-4199-bd5c-b347da91fdbb',
-        type: 'Trigger',
-        name: 'BasicNopeCommand',
-        server: [Circular] } },
-  error: { [Function: errormaker] callpoint: [Function: callpoint] },
-  bus:
-   RabbitMQBus {
-     ...
-   }
-}
-```
+* Step 1
+> You need to create a file who contains __"Query"__ in his name.  
+> __path/you/want/BasicNopeQuery.js__
 
-Now, you have a client who consume the server (we will see later how to implement this).  
-If you subscribe to : __BasicNopeCommand.Success__, you have this in return :
-
-```
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-- You need to create a file who contains __"Command"__ in his name
-- You need to __module.exports__ a promise
-
-And that's all folks, the __server__ will make the rest for you.
-
-In this example, __CreateIndividualCommand.js__ will create a new entry in rethinkdb table __individuals__, after the data validation will succeed.
+* Step 2
+> You need to __module.exports__ a promise.  
 
 ```javascript
 'use strict'
 
 const Promise = require('bluebird')
-const Joi = require('joi')
 
-const rethinkdb = require('./lib/rethinkdb')
-const schema = require('./schema/individual')
-
-const handler = function (params = {}) {
+const handler = function () {
   return new Promise((resolve, reject) => {
-    Joi.validate(params, schema, (error) => {
-      if (error) { return reject(error) }
-      rethinkdb.service('individuals').create(params).then(resolve).catch(reject)
-    })
+    resolve()
   })
 }
 
 module.exports = handler
 ```
+#### Now it's time to start the server
 
-#### Query
+Classic start:
 
-Une __query__ est un __service__ renvoyant des données ou un état (error).
+```
+$ node server.js
+```
 
-#### Trigger
+But, you can run the server in debug mode.
 
-Un __trigger__ écoute sur le bus le passage des évènements.  
-Si un évènement lui est destiné, il le prend et le traite via son __handler__.
-Un __trigger__ n'est pas une promesse, à la fin du handler le process se termine.
+```
+$ DEBUG=cqrs:* node server.js
+```
 
-Un __trigger__ peut être :
+As result you will see the architecture of the server:  
 
-- Utilisé pour un système de logs, ELK par exemple
-- Utilisé pour lancer un ou plusieurs batchs
-- Utilisé pour lancer d'autres évènements sur le bus
-- Utilisé pour lancer des commandes
-- Etc...
+```javascript
+Server {
+  uuid: 'dc2b8300-6e23-4af2-80ee-bd23ada23f5a',
+  options:
+   { connection:
+      { host: 'localhost',
+        port: 5672,
+        timeout: 2000,
+        heartbeat: 10,
+        name: 'default',
+        retryLimit: 3,
+        failAfter: 60 },
+     source: '/home/gperreymond/Workspaces/abibao-cqrs-monolith/application',
+     patterns: [ 'domains/**/commands/*.js', 'domains/**/queries/*.js' ] },
+  starttime: 1476947420966,
+  services:
+   { BasicNopeCommand:
+      Command {
+        uuid: 'b82116c6-97a5-4572-8516-73b1a7d8fe27',
+        error: [Object],
+        type: 'Command',
+        name: 'BasicNopeCommand',
+        EventSuccess: 'BasicNopeCommand.Success',
+        EventError: 'BasicNopeCommand.Error',
+        handler: [Function: handler] },
+     BasicNopeQuery:
+      Query {
+        uuid: 'b6bf8644-35ff-4dbd-9518-c116fbc9287b',
+        error: [Object],
+        type: 'Query',
+        name: 'BasicNopeQuery',
+        EventSuccess: 'BasicNopeQuery.Success',
+        EventError: 'BasicNopeQuery.Error',
+        handler: [Function: handler] } },
+  receivers:
+   { BasicNopeCommand:
+      Receiver {
+        domain: null,
+        _events: {},
+        _eventsCount: 0,
+        _maxListeners: undefined,
+        rabbit: [Object],
+        options: [Object],
+        defaults: [Object],
+        middlewareBuilder: [Object] },
+     BasicNopeQuery:
+      Receiver {
+        domain: null,
+        _events: {},
+        _eventsCount: 0,
+        _maxListeners: undefined,
+        rabbit: [Object],
+        options: [Object],
+        defaults: [Object],
+        middlewareBuilder: [Object] } },
+  publishers:
+   { 'BasicNopeCommand.Success':
+      Publisher {
+        domain: null,
+        _events: {},
+        _eventsCount: 0,
+        _maxListeners: undefined,
+        rabbit: [Object],
+        options: [Object],
+        defaults: [Object],
+        middlewareBuilder: [Object] },
+     'BasicNopeCommand.Error':
+      Publisher {
+        domain: null,
+        _events: {},
+        _eventsCount: 0,
+        _maxListeners: undefined,
+        rabbit: [Object],
+        options: [Object],
+        defaults: [Object],
+        middlewareBuilder: [Object] },
+     'BasicNopeQuery.Success':
+      Publisher {
+        domain: null,
+        _events: {},
+        _eventsCount: 0,
+        _maxListeners: undefined,
+        rabbit: [Object],
+        options: [Object],
+        defaults: [Object],
+        middlewareBuilder: [Object] },
+     'BasicNopeQuery.Error':
+      Publisher {
+        domain: null,
+        _events: {},
+        _eventsCount: 0,
+        _maxListeners: undefined,
+        rabbit: [Object],
+        options: [Object],
+        defaults: [Object],
+        middlewareBuilder: [Object] } },
+  error: { [Function: errormaker] callpoint: [Function: callpoint] }
+}
+```
 
-Il existe deux types de __triggers__ :
+The structure of this object need some explanations, let's take a look:
 
-- __System__ : Générés automatiquement par de le démarrage de __server__
-- __Custom__ : Les votres, faites vous plaisir
+* Services: Contains all your handlers loaded by the server at the start and decorated with some properties and methods.
+* Receivers: Contains all the event listeners connected to the bus, to start the Services by triggering.
+* Publishers: Contains all the events emitters connected to the bus, to inform the System about Services resolution.
 
-## Architecture CQRS
+#### Client
 
-Vous avez un exemple assez large de tout ce que l'on peut faire dans le dossier __example__ du projet.
+It's time to learn how to link all those services and events together, let's me introduce the __Client__ object.
 
-- [x] Utilisation de rethinkdb sous forme de services via __feathers-rethinkdb__
-- [x] Un exemple de client utilisant directement le bus rabbitmq
-- [ ] Utilisation de MySQL via knex
-- [ ] Traitement d'image par imageMagick
-- [ ] Analyse d'image par OpenCV
+###### Definitions
 
-#### Les fichiers sources
+A client could be wherever you need it to be, even on another server, or behind a hapiJS/Express server, or why not in another __CQRS Server__.  
+You will have three patterns to use the __server__ events bus.
 
-Vous pouvez organiser votre architecture comme bon vous semble, il vous suffit de pointer vers les patterns de fichiers/dossiers souhaités, au format glob, lors du lancement de __server__.
+###### Sender/Receiver pattern
+
+> The Send / Receive object pair uses a direct exchange inside of RabbitMQ
+
+###### Publisher/Subscriber pattern
+
+> The Publish / Subscribe object pair uses a fanout exchange inside of RabbitMQ, allowing you to have as many subscribers as you need. Think of pub/sub as an event that gets broadcast to anyone that cares, or no one at all if no one is listening.
+
+###### Request/Response pattern
+
+> The request/response pair uses a "topic" exchange.
+> With a request/response setup, you can send a request for information and respond to it.
+
+###### Sender/Receiver examples
+
+* When the __server__ start and load your handlers, receivers are created in the __server__.
+* Sender client is a classic fire and forget on the bus. In return you will have only a result who informs you if the __command__ or the __query__ has been executed succesfully not.  
+* With this pattern you can't know the real result of the service.  
+* You can use this pattern if you want to run a batch, or an emails service runner, etc.
+
+Create a file __client-sender.js__, and and this code in:
+
+```javascript
+'use strict'
+
+const Client = require('node-cqrs-framework').Client
+const client = new Client()
+
+const handlerSuccess = function () {
+  const params = {
+    a: 'a',
+    b: 'b'
+  }
+  client.send('BasicNopeQuery', params)
+    .then((result) => {
+      console.log(result)
+      process.exit(0)
+    })
+    .catch((error) => {
+      console.log(error)
+      process.exit(1)
+    })
+}
+
+const handlerError = function (error) {
+  console.log(error)
+  process.exit(1)
+}
+
+client.initialize().then(handlerSuccess).catch(handlerError)
+```
+
+Time to run:
+
+```
+$ node client-sender.js
+```
+
+And here the result:
+
+```javascript
+{ uuid: 'd6ce4837-8700-46cf-8e7a-356d0e184d2f',
+  type: 'Client.Send',
+  name: 'BasicNopeQuery',
+  exectime: 655,
+  result: { sended: true } }
+```
+
+###### Roadmap
+
+* [ ] Publisher not implemented yet
+* [x] Subscriber implemented
+* [x] Sender implemented
+* [ ] Receiver not implemented yet
+* [ ] Request not implemented yet
+* [ ] Response not implemented yet
+
+```
+
+```

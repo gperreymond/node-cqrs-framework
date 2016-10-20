@@ -1,4 +1,3 @@
-/* global describe:false, it:false */
 'use strict'
 
 const standard = require('mocha-standard')

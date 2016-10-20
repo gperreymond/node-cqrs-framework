@@ -1,6 +1,6 @@
 {
   "name": "node-cqrs-framework",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "Do not use, research only.",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "author": "Gilles Perreymond <gperreymond@gmail.com> (https://github.com/gperreymond)",
   "contributors": [],
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/gperreymond/node-cqrs-framework/issues"
   },
@@ -52,6 +52,7 @@
     "standard": "8.4.0"
   },
   "standard": {
+    "globals": [ "describe", "it" ],
     "ignore": [
       "coverage/**"
     ]
