@@ -1,6 +1,6 @@
 'use strict'
 
-const Client = require('node-cqrs-framework').Client
+const Client = require('../').Client
 const client = new Client()
 
 const handlerSuccess = function () {

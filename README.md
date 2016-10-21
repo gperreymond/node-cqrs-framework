@@ -333,8 +333,8 @@ And here the result:
 * [ ] Publisher not implemented yet
 * [x] Subscriber implemented
 * [x] Sender implemented
-* [ ] Receiver not implemented yet
-* [ ] Request not implemented yet
+* [x] Receiver implemented
+* [x] Request implemented
 * [ ] Response not implemented yet
 
 ```

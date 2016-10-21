@@ -24,7 +24,7 @@ describe('[unit] errors', function () {
         expect(error).to.have.property('details')
         expect(error).to.have.property('code')
         expect(error.eraro).to.be.equal(true)
-        expect(error.code).to.be.equal('server_error_no_bus_connected')
+        expect(error.code).to.be.equal('server_rabbot_error')
         expect(error['cqrs-framework']).to.be.equal(true)
         expect(error.details).to.be.an('object')
         done()

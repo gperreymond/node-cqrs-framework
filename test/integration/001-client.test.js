@@ -44,6 +44,37 @@ describe('[integration] client/server tests', function () {
   it('should prepare initializations', function (done) {
     initializers().then(done).catch(done)
   })
+  it('should success in client.request(action, data)', function (done) {
+    client.request('CreateIndividualCommand', {email: 'client@test.com'})
+      .then((result) => {
+        expect(result).to.be.an('object')
+        expect(result).to.have.property('uuid')
+        expect(result).to.have.property('type')
+        expect(result).to.have.property('name')
+        expect(result).to.have.property('exectime')
+        expect(result).to.have.property('result')
+        expect(result.uuid).to.be.a('string')
+        expect(result.type).to.be.a('string')
+        expect(result.name).to.be.a('string')
+        expect(result.exectime).to.be.a('number')
+        expect(result.result).to.be.a('boolean').to.be.eq(true)
+        done()
+      })
+      .catch(done)
+  })
+  it('should fail in client.request(action, data)', function (done) {
+    client.request('CreateIndividualCommand', {email: true})
+      .then(done)
+      .catch((error) => {
+        expect(error).to.have.property('eraro')
+        expect(error).to.have.property('cqrs-framework')
+        expect(error).to.have.property('details')
+        expect(error.eraro).to.be.equal(true)
+        expect(error['cqrs-framework']).to.be.equal(true)
+        expect(error.details).to.be.an('object')
+        done()
+      })
+  })
   it('should success in client.send(action, data)', function (done) {
     client.trigger.on('CreateIndividualCommand.Success', handlerSuccess)
     client.send('CreateIndividualCommand', {email: 'client@test.com'})
