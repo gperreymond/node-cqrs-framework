@@ -1,4 +1,3 @@
-/* global describe:false, it:false */
 'use strict'
 
 const path = require('path')
@@ -63,29 +62,7 @@ describe('[integration] individuals life cycle', function () {
         expect(result.uuid).to.be.a('string')
         expect(result.type).to.be.a('string')
         expect(result.name).to.be.a('string')
-        expect(result.exectime).to.be.a('number')
-        expect(result.result).to.have.property('id')
-        expect(result.result.id).to.be.a('string')
-        data = result.result
-        done()
-      })
-      .catch(done)
-  })
-  it('should get individual', function (done) {
-    server.execute('GetIndividualByIdQuery', data.id)
-      .then((result) => {
-        expect(result).to.be.an('object')
-        expect(result).to.have.property('uuid')
-        expect(result).to.have.property('type')
-        expect(result).to.have.property('name')
-        expect(result).to.have.property('exectime')
-        expect(result).to.have.property('result')
-        expect(result.uuid).to.be.a('string')
-        expect(result.type).to.be.a('string')
-        expect(result.name).to.be.a('string')
-        expect(result.exectime).to.be.a('number')
-        expect(result.result).to.have.property('id')
-        expect(result.result.id).to.be.a('string')
+        expect(result.result).to.be.a('boolean').to.be.eq(true)
         done()
       })
       .catch(done)
@@ -109,6 +86,26 @@ describe('[integration] individuals life cycle', function () {
         expect(result.result).to.be.an('object')
         expect(result.result).to.have.property('total')
         expect(result.result.total).to.be.a('number')
+        data = result.result.data[1]
+        done()
+      })
+      .catch(done)
+  })
+  it('should get individual', function (done) {
+    server.execute('GetIndividualByIdQuery', data.id)
+      .then((result) => {
+        expect(result).to.be.an('object')
+        expect(result).to.have.property('uuid')
+        expect(result).to.have.property('type')
+        expect(result).to.have.property('name')
+        expect(result).to.have.property('exectime')
+        expect(result).to.have.property('result')
+        expect(result.uuid).to.be.a('string')
+        expect(result.type).to.be.a('string')
+        expect(result.name).to.be.a('string')
+        expect(result.exectime).to.be.a('number')
+        expect(result.result).to.have.property('id')
+        expect(result.result.id).to.be.a('string')
         done()
       })
       .catch(done)

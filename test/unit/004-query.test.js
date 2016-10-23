@@ -1,4 +1,3 @@
-/* global describe:false, it:false */
 'use strict'
 
 const Query = require('../..').Query

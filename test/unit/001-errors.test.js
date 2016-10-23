@@ -1,4 +1,3 @@
-/* global describe:false, it:false */
 'use strict'
 
 const Server = require('../..').Server
@@ -25,7 +24,7 @@ describe('[unit] errors', function () {
         expect(error).to.have.property('details')
         expect(error).to.have.property('code')
         expect(error.eraro).to.be.equal(true)
-        expect(error.code).to.be.equal('server_error_no_bus_connected')
+        expect(error.code).to.be.equal('server_rabbot_error')
         expect(error['cqrs-framework']).to.be.equal(true)
         expect(error.details).to.be.an('object')
         done()
@@ -75,7 +74,7 @@ describe('[unit] errors', function () {
         port: 5680
       }
     })
-    client.send('NopeCommand', {})
+    client.initialize()
       .then(() => {
         done(new Error('no error detected'))
       })
