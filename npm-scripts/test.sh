@@ -7,7 +7,7 @@
 # exit on sub-module failure
 set -e
 
-export CODACY_PROJECT_TOKEN=3862e173a5284d0984ee3bb50d6a8f24
+export CODACY_PROJECT_TOKEN=5705316ff8f6499d9373f0f76340bfa5
 rm -rf coverage
 
 npm run test:coverage
