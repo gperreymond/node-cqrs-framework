@@ -1,16 +1,15 @@
 {
   "name": "node-cqrs-framework",
-  "version": "0.1.8",
+  "version": "0.2.010",
   "description": "Do not use, research only.",
   "main": "index.js",
   "scripts": {
-    "setup:deve": "./script/setup-deve.sh",
-    "start:deve": "DEBUG=cqrs:* node example/server.js",
-    "test": "npm run test:coverage",
+    "setup:deve": "./npm-scripts/setup-deve.sh",
+    "test": "./npm-scripts/test.sh",
     "test:standard": "node_modules/.bin/standard --verbose | snazzy",
-    "test:unit": "node_modules/.bin/_mocha --timeout 5000 --use_strict --recursive test/unit",
-    "test:integration": "node_modules/.bin/_mocha --timeout 5000 --use_strict --recursive test/integration",
-    "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --opts .mocharc"
+    "test:unit": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 5000 --use_strict --recursive test/unit",
+    "test:integration": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 5000 --use_strict --recursive test/integration",
+    "test:coverage": "node_modules/.bin/istanbul cover -x 'examples/**/*.*' node_modules/.bin/_mocha -- --opts .mocharc"
   },
   "repository": {
     "type": "git",
@@ -30,29 +29,23 @@
     "bluebird": "3.4.6",
     "debug": "2.2.0",
     "eraro": "0.4.1",
-    "eventstore": "1.8.2",
     "glob": "7.1.1",
     "hoek": "4.1.0",
-    "lodash": "4.16.4",
-    "nconf": "0.8.4",
+    "lodash": "4.16.6",
     "rabbot": "1.0.6",
     "rabbus": "0.8.2",
     "uuid": "2.0.3"
   },
   "devDependencies": {
-    "bunyan": "1.8.3",
-    "bunyan-lumberjack": "1.1.0",
     "chai": "3.5.0",
     "chance": "1.0.4",
-    "feathers-query-filters": "2.1.1",
-    "feathers-rethinkdb": "0.2.8",
     "istanbul": "0.4.5",
     "joi": "9.2.0",
     "mocha": "3.1.2",
     "mocha-standard": "1.0.0",
-    "rethinkdbdash": "2.3.23",
+    "sinon": "1.17.6",
     "snazzy": "5.0.0",
-    "standard": "8.4.0"
+    "standard": "8.5.0"
   },
   "standard": {
     "globals": [
