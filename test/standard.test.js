@@ -7,6 +7,6 @@ describe('code style', function () {
     'index.js',
     'test/**/*.js',
     'lib/**/*.js',
-    'example/**/*.js'
+    'examples/**/*.js'
   ]))
 })

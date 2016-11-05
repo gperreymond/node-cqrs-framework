@@ -1,5 +1,6 @@
 'use strict'
 
+const Promise = require('bluebird')
 const Server = require('../..').Server
 const Command = require('../..').Command
 
@@ -8,6 +9,9 @@ const chai = require('chai')
 const expect = chai.expect
 
 const basedir = path.resolve(__dirname, '../..')
+
+const RabbotMock = require('../mocks/Rabbot')
+const rabbotMock = new RabbotMock()
 
 const handlerMockReject = function () {
   return new Promise((resolve, reject) => {
@@ -20,8 +24,12 @@ const handlerMockPublisher = function () {}
 describe('[unit] class server', function () {
   it('should load files and create handlers', function (done) {
     const server = new Server({
-      source: path.resolve(basedir, 'example/application'),
-      patterns: ['**/*.js']
+      rabbot: rabbotMock,
+      bus: {
+        port: 6666
+      },
+      source: path.resolve(basedir, 'examples'),
+      patterns: ['commands/**/*.js', 'queries/**/*.js']
     })
     server.initialize()
       .then(() => {
@@ -37,7 +45,14 @@ describe('[unit] class server', function () {
       .catch(done)
   })
   it('should use the execute and be rejected', function (done) {
-    const server = new Server()
+    const server = new Server({
+      rabbot: rabbotMock,
+      bus: {
+        port: 6666
+      },
+      source: path.resolve(basedir, 'examples'),
+      patterns: ['commands/**/*.js', 'queries/**/*.js']
+    })
     server.services = {
       'HandlerMockReject': new Command('HandlerMockReject', handlerMockReject)
     }
@@ -46,19 +61,18 @@ describe('[unit] class server', function () {
         publish: handlerMockPublisher
       }
     }
-    server.initialize()
-      .catch(() => {
-        server.execute('HandlerMockReject')
-          .catch((error) => {
-            expect(error).to.be.an('error')
-            expect(error).to.have.property('eraro')
-            expect(error).to.have.property('cqrs-framework')
-            expect(error).to.have.property('details')
-            expect(error.eraro).to.be.equal(true)
-            expect(error['cqrs-framework']).to.be.equal(true)
-            expect(error.details).to.be.an('object')
-            done()
-          })
+    server.execute('HandlerMockReject')
+      .then(() => {
+        done(new Error('no error detected'))
+      })
+      .catch((error) => {
+        expect(error).to.have.property('eraro')
+        expect(error).to.have.property('cqrs-framework')
+        expect(error).to.have.property('details')
+        expect(error.eraro).to.be.equal(true)
+        expect(error['cqrs-framework']).to.be.equal(true)
+        expect(error.details).to.be.an('object')
+        done()
       })
   })
 })

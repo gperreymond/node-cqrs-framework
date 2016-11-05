@@ -1,12 +1,6 @@
 machine:
 
   environment:
-    CQRS_RETHINKDB_PORT: 28015
-    CQRS_RETHINKDB_DB: test
-    CQRS_RETHINKDB_USER: admin
-    CQRS_RETHINKDB_HOST: localhost
-    CQRS_RABBITMQ_PORT: 5672
-    CQRS_RABBITMQ_HOST: localhost
 
   timezone:
     Europe/Paris
@@ -21,10 +15,6 @@ dependencies:
 
   cache_directories:
     - node_modules
-
-  override:
-    - sh ./script/ci-bootstrap-rabbitmq.sh
-    - sh ./script/ci-bootstrap-rethinkdb.sh
 
 test:
 

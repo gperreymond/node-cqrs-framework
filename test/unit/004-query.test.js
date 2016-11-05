@@ -21,7 +21,6 @@ describe('[unit] class query', function () {
   it('should be instancied', function (done) {
     let query = new Query('TestUnitQuery', handlerMockResolve)
     expect(query).to.be.an('object')
-    expect(query).to.have.property('uuid')
     expect(query).to.have.property('error')
     expect(query).to.have.property('type')
     expect(query).to.have.property('name')
@@ -40,12 +39,10 @@ describe('[unit] class query', function () {
     query.execute()
       .then(function (result) {
         expect(result).to.be.an('object')
-        expect(result).to.have.property('uuid')
         expect(result).to.have.property('type')
         expect(result).to.have.property('name')
         expect(result).to.have.property('exectime')
         expect(result).to.have.property('result')
-        expect(result.uuid).to.be.a('string')
         expect(result.type).to.be.a('string')
         expect(result.name).to.be.a('string')
         expect(result.exectime).to.be.a('number')
@@ -56,7 +53,6 @@ describe('[unit] class query', function () {
     let query = new Query('TestUnitquery', handlerMockReject)
     query.execute()
       .catch(function (error) {
-        expect(error).to.be.an('error')
         expect(error).to.have.property('eraro')
         expect(error).to.have.property('cqrs-framework')
         expect(error).to.have.property('details')

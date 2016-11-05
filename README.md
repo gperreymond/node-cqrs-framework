@@ -1,10 +1,13 @@
 # node-cqrs-framework
 
-* [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) [![CodeFactor](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework/badge)](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework)  
-* [![CircleCI](https://circleci.com/gh/gperreymond/node-cqrs-framework.svg?style=svg)](https://circleci.com/gh/gperreymond/node-cqrs-framework)
+[![dependencies Status](https://david-dm.org/gperreymond/node-cqrs-framework/status.svg)](https://david-dm.org/gperreymond/node-cqrs-framework) [![devDependencies Status](https://david-dm.org/gperreymond/node-cqrs-framework/dev-status.svg)](https://david-dm.org/gperreymond/node-cqrs-framework?type=dev)
+
+ [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) [![CodeFactor](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework/badge)](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/631ec702300943ccaabaa91e47a4dbc1)](https://www.codacy.com/app/abibao-group/node-cqrs-framework?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gperreymond/node-cqrs-framework&amp;utm_campaign=Badge_Grade)
+
+[![CircleCI](https://circleci.com/gh/gperreymond/node-cqrs-framework.svg?style=svg)](https://circleci.com/gh/gperreymond/node-cqrs-framework)
 
 node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures over rabbitmq service discovery.  
-node-cqrs-framework use the powerfull Rabbus (https://github.com/derickbailey/rabbus) and Rabbitmq.
+node-cqrs-framework use the powerfull Rabbus (https://github.com/derickbailey/rabbus) to manipulate RabbitMQ.
 
 ## Description
 
@@ -16,10 +19,9 @@ Think better! Think KISS!
 
 * Only one monolithic project in your github.
 * Only one monolithic project to maintain.
-* Could be DDD oriented if you want.
 * Configuration-driven oriented framework.
 * Agnostics commands and queries, they just had to be promises.
-* Tests are dissociate from the CQRS (more easy to implements).
+* Tests are dissociate from the notion of CQRS.
 * Deploy and scale your microservices like you want.
 * Automatic services discovery! Thanks rabbitmq.
 
@@ -52,7 +54,8 @@ const server = new Server({
 })
 
 console.log('server on initialize')
-server.initialize()
+server
+  .initialize()
   .then(() => {
     console.log('server has initialized')
     console.log(server)
@@ -142,114 +145,6 @@ But, you can run the server in debug mode.
 ```
 $ DEBUG=cqrs:* node server.js
 ```
-
-As result you will see the architecture of the server:  
-
-```javascript
-Server {
-  uuid: 'dc2b8300-6e23-4af2-80ee-bd23ada23f5a',
-  options:
-   { connection:
-      { host: 'localhost',
-        port: 5672,
-        timeout: 2000,
-        heartbeat: 10,
-        name: 'default',
-        retryLimit: 3,
-        failAfter: 60 },
-     source: '/home/gperreymond/Workspaces/abibao-cqrs-monolith/application',
-     patterns: [ 'domains/**/commands/*.js', 'domains/**/queries/*.js' ] },
-  starttime: 1476947420966,
-  services:
-   { BasicNopeCommand:
-      Command {
-        uuid: 'b82116c6-97a5-4572-8516-73b1a7d8fe27',
-        error: [Object],
-        type: 'Command',
-        name: 'BasicNopeCommand',
-        EventSuccess: 'BasicNopeCommand.Success',
-        EventError: 'BasicNopeCommand.Error',
-        handler: [Function: handler] },
-     BasicNopeQuery:
-      Query {
-        uuid: 'b6bf8644-35ff-4dbd-9518-c116fbc9287b',
-        error: [Object],
-        type: 'Query',
-        name: 'BasicNopeQuery',
-        EventSuccess: 'BasicNopeQuery.Success',
-        EventError: 'BasicNopeQuery.Error',
-        handler: [Function: handler] } },
-  receivers:
-   { BasicNopeCommand:
-      Receiver {
-        domain: null,
-        _events: {},
-        _eventsCount: 0,
-        _maxListeners: undefined,
-        rabbit: [Object],
-        options: [Object],
-        defaults: [Object],
-        middlewareBuilder: [Object] },
-     BasicNopeQuery:
-      Receiver {
-        domain: null,
-        _events: {},
-        _eventsCount: 0,
-        _maxListeners: undefined,
-        rabbit: [Object],
-        options: [Object],
-        defaults: [Object],
-        middlewareBuilder: [Object] } },
-  publishers:
-   { 'BasicNopeCommand.Success':
-      Publisher {
-        domain: null,
-        _events: {},
-        _eventsCount: 0,
-        _maxListeners: undefined,
-        rabbit: [Object],
-        options: [Object],
-        defaults: [Object],
-        middlewareBuilder: [Object] },
-     'BasicNopeCommand.Error':
-      Publisher {
-        domain: null,
-        _events: {},
-        _eventsCount: 0,
-        _maxListeners: undefined,
-        rabbit: [Object],
-        options: [Object],
-        defaults: [Object],
-        middlewareBuilder: [Object] },
-     'BasicNopeQuery.Success':
-      Publisher {
-        domain: null,
-        _events: {},
-        _eventsCount: 0,
-        _maxListeners: undefined,
-        rabbit: [Object],
-        options: [Object],
-        defaults: [Object],
-        middlewareBuilder: [Object] },
-     'BasicNopeQuery.Error':
-      Publisher {
-        domain: null,
-        _events: {},
-        _eventsCount: 0,
-        _maxListeners: undefined,
-        rabbit: [Object],
-        options: [Object],
-        defaults: [Object],
-        middlewareBuilder: [Object] } },
-  error: { [Function: errormaker] callpoint: [Function: callpoint] }
-}
-```
-
-The structure of this object need some explanations, let's take a look:
-
-* Services: Contains all your handlers loaded by the server at the start and decorated with some properties and methods.
-* Receivers: Contains all the event listeners connected to the bus, to start the Services by triggering.
-* Publishers: Contains all the events emitters connected to the bus, to inform the System about Services resolution.
 
 #### Client
 
