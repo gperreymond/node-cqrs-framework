@@ -21,6 +21,7 @@ class RabbotMock {
       }
     })
   }
+  publish () { }
   addExchange () { }
   addQueue () { }
   bindQueue () { }

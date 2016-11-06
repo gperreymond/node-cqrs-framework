@@ -2,7 +2,7 @@
 
 [![dependencies Status](https://david-dm.org/gperreymond/node-cqrs-framework/status.svg)](https://david-dm.org/gperreymond/node-cqrs-framework) [![devDependencies Status](https://david-dm.org/gperreymond/node-cqrs-framework/dev-status.svg)](https://david-dm.org/gperreymond/node-cqrs-framework?type=dev)
 
- [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) [![CodeFactor](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework/badge)](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/631ec702300943ccaabaa91e47a4dbc1)](https://www.codacy.com/app/abibao-group/node-cqrs-framework?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gperreymond/node-cqrs-framework&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/631ec702300943ccaabaa91e47a4dbc1)](https://www.codacy.com/app/abibao-group/node-cqrs-framework?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gperreymond/node-cqrs-framework&amp;utm_campaign=Badge_Coverage)
+ [![JavaScript Style Guide](https://img.shields.io/badge/code/style-standard-brightgreen.png)](http://standardjs.com/) [![CodeFactor](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework/badge)](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/631ec702300943ccaabaa91e47a4dbc1)](https://www.codacy.com/app/abibao-group/node-cqrs-framework?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gperreymond/node-cqrs-framework&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/631ec702300943ccaabaa91e47a4dbc1)](https://www.codacy.com/app/abibao-group/node-cqrs-framework?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gperreymond/node-cqrs-framework&amp;utm_campaign=Badge_Coverage)
 
 [![CircleCI](https://circleci.com/gh/gperreymond/node-cqrs-framework.svg?style=svg)](https://circleci.com/gh/gperreymond/node-cqrs-framework)
 
@@ -43,27 +43,36 @@ The __server__ is the main program, he needs to be start at first. Because the p
 'use strict'
 
 const path = require('path')
-const Server = require('node-cqrs-framework').Server
 
+// server configuration
+const Server = require('../').Server
 const server = new Server({
-  source: path.resolve(__dirname, 'application'),
+  bus: {
+    host: 'localhost',
+    port: 5672,
+    user: 'user',
+    pass: 'password'
+  },
+  source: path.resolve(__dirname),
   patterns: [
-    'domains/**/commands/*.js',
-    'domains/**/queries/*.js'
+    'commands/**/*.js',
+    'queries/**/*.js'
   ]
 })
 
-console.log('server on initialize')
+// server handlers
+const readyHandler = () => {
+  // do something if you want!
+}
+const errorHandler = (error) => {
+  console.log(error)
+  process.exit(1)
+}
+
 server
   .initialize()
-  .then(() => {
-    console.log('server has initialized')
-    console.log(server)
-  })
-  .catch((error) => {
-    console.log(error)
-    process.exit(1)
-  })
+  .then(readyHandler)
+  .catch(errorHandler)
 ```
 
 #### Service
@@ -82,12 +91,12 @@ You will never have to use this class, __Command__ and __Query__ extend it.
 
 How to create a __Command__ ?
 
-* Step 1
-> You need to create a file who contains __"Command"__ in his name.  
-> __path/you/want/BasicNopeCommand.js__
+__Step 1__  
+You need to create a file who contains __"Command"__ in his name.  
+__path/you/want/BasicNopeCommand.js__
 
-* Step 2
-> You need to __module.exports__ a promise.  
+__Step 2__  
+You need to __module.exports__ a promise.  
 
 ```javascript
 'use strict'
@@ -112,12 +121,12 @@ From the framework point of view a __query__ is the same as a __command__, but b
 
 How to create a __Query__ ?
 
-* Step 1
-> You need to create a file who contains __"Query"__ in his name.  
-> __path/you/want/BasicNopeQuery.js__
+__Step 1__  
+You need to create a file who contains __"Query"__ in his name.  
+__path/you/want/BasicNopeQuery.js__
 
-* Step 2
-> You need to __module.exports__ a promise.  
+__Step 2__  
+You need to __module.exports__ a promise.  
 
 ```javascript
 'use strict'
@@ -157,21 +166,21 @@ You will have three patterns to use the __server__ events bus.
 
 ###### Sender/Receiver pattern
 
-> The Send / Receive object pair uses a direct exchange inside of RabbitMQ
+The Send / Receive object pair uses a direct exchange inside of RabbitMQ
 
 ###### Publisher/Subscriber pattern
 
-> The Publish / Subscribe object pair uses a fanout exchange inside of RabbitMQ, allowing you to have as many subscribers as you need. Think of pub/sub as an event that gets broadcast to anyone that cares, or no one at all if no one is listening.
+The Publish / Subscribe object pair uses a fanout exchange inside of RabbitMQ, allowing you to have as many subscribers as you need. Think of pub/sub as an event that gets broadcast to anyone that cares, or no one at all if no one is listening.
 
 ###### Request/Response pattern
 
-> The request/response pair uses a "topic" exchange.
-> With a request/response setup, you can send a request for information and respond to it.
+The request/response pair uses a "topic" exchange.
+With a request/response setup, you can send a request for information and respond to it.
 
 ###### Sender/Receiver examples
 
 * When the __server__ start and load your handlers, receivers are created in the __server__.
-* Sender client is a classic fire and forget on the bus. In return you will have only a result who informs you if the __command__ or the __query__ has been executed succesfully not.  
+* Sender client is a classic fire and forget on the bus. In return you will have only a result who informs you if the __command__ or the __query__ has been executed succesfully or not.  
 * With this pattern you can't know the real result of the service.  
 * You can use this pattern if you want to run a batch, or an emails service runner, etc.
 
@@ -180,31 +189,45 @@ Create a file __client-sender.js__, and and this code in:
 ```javascript
 'use strict'
 
-const Client = require('node-cqrs-framework').Client
-const client = new Client()
+// client configuration
+const Client = require('../').Client
+const client = new Client({
+  host: 'localhost',
+  port: 5672,
+  user: 'user',
+  pass: 'password'
+})
 
-const handlerSuccess = function () {
-  const params = {
-    a: 'a',
-    b: 'b'
-  }
-  client.send('BasicNopeQuery', params)
-    .then((result) => {
-      console.log(result)
-      process.exit(0)
-    })
-    .catch((error) => {
-      console.log(error)
-      process.exit(1)
-    })
+// client subscribe handlers
+const successCommandHandler = (message) => {
+  console.log('successHandler', message)
+}
+const errorCommandHandler = (error) => {
+  console.log('errorHandler', error)
 }
 
-const handlerError = function (error) {
+// client handlers
+const readyHandler = () => {
+  let count = 1
+  setInterval(() => {
+    client.send('BasicNopeCommand', {date: Date.now(), count}, (acknowledgement) => {
+      console.log('acknowledgement', acknowledgement)
+      count++
+    })
+  }, 2000)
+}
+const errorHandler = (error) => {
   console.log(error)
   process.exit(1)
 }
 
-client.initialize().then(handlerSuccess).catch(handlerError)
+// client start sequence
+client
+  .subscribe('BasicNopeCommand.Success', successCommandHandler)
+  .subscribe('BasicNopeCommand.Error', errorCommandHandler)
+  .initialize()
+  .then(readyHandler)
+  .catch(errorHandler)
 ```
 
 Time to run:
@@ -225,11 +248,11 @@ And here the result:
 
 ###### Roadmap
 
-* [ ] Publisher not implemented yet
+* [x] Publisher implemented
 * [x] Subscriber implemented
 * [x] Sender implemented
-* [x] Receiver implemented
-* [x] Request implemented
+* [ ] Receiver implemented
+* [ ] Request implemented
 * [ ] Response not implemented yet
 
 ```

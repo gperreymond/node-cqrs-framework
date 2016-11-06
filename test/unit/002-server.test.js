@@ -29,7 +29,7 @@ describe('[unit] class server', function () {
         port: 6666
       },
       source: path.resolve(basedir, 'examples'),
-      patterns: ['commands/**/*.js', 'queries/**/*.js']
+      patterns: ['commands/**/*.js', 'queries/**/*.js', 'bads/**/*.js']
     })
     server.initialize()
       .then(() => {
