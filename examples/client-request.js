@@ -9,13 +9,12 @@ const client = new Client({
   pass: 'none'
 })
 
-// client subscribe handlers
-const successCommandHandler = (message) => {
-  console.log('successHandler', message)
-}
-
 // client handlers
 const readyHandler = () => {
+  client.request('BasicNopeQuery', {debug: true}, (result) => {
+    console.log(result)
+    process.exit(0)
+  })
 }
 const errorHandler = (error) => {
   console.log(error)
@@ -24,7 +23,6 @@ const errorHandler = (error) => {
 
 // client start sequence
 client
-  .subscribe('BasicNopeCommand.Success', successCommandHandler)
   .initialize()
   .then(readyHandler)
   .catch(errorHandler)

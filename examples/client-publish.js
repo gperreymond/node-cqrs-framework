@@ -5,8 +5,8 @@ const Client = require('../').Client
 const client = new Client({
   host: 'localhost',
   port: 5656,
-  user: 'user',
-  pass: 'password'
+  user: 'admin',
+  pass: 'none'
 })
 
 // client subscribe handlers

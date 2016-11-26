@@ -8,8 +8,8 @@ const server = new Server({
   bus: {
     host: 'localhost',
     port: 5656,
-    user: 'user',
-    pass: 'password'
+    user: 'admin',
+    pass: 'none'
   },
   source: path.resolve(__dirname),
   patterns: [

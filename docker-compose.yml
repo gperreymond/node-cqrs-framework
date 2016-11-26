@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  node:
+    image: mhart/alpine-node:6
+    container_name: deve_cqrs_node
+    depends_on:
+      - rabbitmq
+    command: node --version
+  rabbitmq:
+    image: tutum/rabbitmq:latest
+    container_name: deve_cqrs_rabbitmq
+    ports:
+      - "5656:5672"
+      - "8089:15672"
+    environment:
+      RABBITMQ_PASS: none
