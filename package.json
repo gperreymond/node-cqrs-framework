@@ -1,6 +1,6 @@
 {
   "name": "node-cqrs-framework",
-  "version": "0.9.0",
+  "version": "0.9.2",
   "description": "Do not use, research only.",
   "main": "index.js",
   "scripts": {

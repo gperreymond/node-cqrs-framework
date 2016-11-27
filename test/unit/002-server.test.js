@@ -18,8 +18,16 @@ const handlerMockReject = function () {
     reject(new Error('This an error in the unit tests'))
   })
 }
+const handlerMockResolve = function () {
+  return new Promise((resolve, reject) => {
+    resolve({test: true})
+  })
+}
 
 const handlerMockPublisher = function () {}
+
+const MockPluginA = function () {}
+const MockPluginB = function () {}
 
 describe('[unit] class server', function () {
   it('should load files and create handlers', function (done) {
@@ -74,5 +82,49 @@ describe('[unit] class server', function () {
         expect(error.details).to.be.an('object')
         done()
       })
+  })
+  it('should use the execute and succeed', function (done) {
+    const server = new Server({
+      rabbot: rabbotMock,
+      bus: {
+        port: 6666
+      },
+      source: path.resolve(basedir, 'examples'),
+      patterns: ['commands/**/*.js', 'queries/**/*.js']
+    })
+    server.services = {
+      'HandlerMockResolve': new Command('HandlerMockResolve', handlerMockResolve)
+    }
+    server.publishers = {
+      'HandlerMockResolve.Success': {
+        publish: handlerMockPublisher
+      }
+    }
+    server.execute('HandlerMockResolve')
+      .then((result) => {
+        expect(result).to.be.an('object')
+        done()
+      })
+      .catch(done)
+  })
+  it('should register 2 plugins', function (done) {
+    const server = new Server({
+      rabbot: rabbotMock,
+      bus: {
+        port: 6666
+      },
+      source: path.resolve(basedir, 'examples'),
+      patterns: ['commands/**/*.js', 'queries/**/*.js']
+    })
+    server
+      .register('MockPluginA', MockPluginA)
+      .register('MockPluginB', MockPluginB)
+      .initialize()
+      .then(() => {
+        expect(server.plugins).to.have.property('MockPluginA')
+        expect(server.plugins).to.have.property('MockPluginB')
+        done()
+      })
+      .catch(done)
   })
 })

@@ -18,7 +18,7 @@ const client = new Client({
   port: 6666
 })
 
-describe('[unit] class server', function () {
+describe('[unit] class client', function () {
   it('should initialize', function (done) {
     client
       .subscribe('BasicMockCommand.Success', successMockCommandHandler)
@@ -45,5 +45,32 @@ describe('[unit] class server', function () {
       stub.restore()
       done()
     })
+  })
+  it('should successfully use request', function (done) {
+    var stub = sinon.stub(Rabbus, 'Requester', (rabbot, name) => {
+      return {
+        request (params, callback) {
+          callback(params)
+        }
+      }
+    })
+    client.request('BasicMockCommand', {test: true}, (result) => {
+      expect(result).to.be.an('object')
+      expect(result.test).to.be.eq(true)
+      stub.restore()
+      done()
+    })
+  })
+  it('should successfully use publish', function (done) {
+    var stub = sinon.stub(Rabbus, 'Publisher', (rabbot, name) => {
+      return {
+        publish (params, callback) {
+          stub.restore()
+          callback()
+          done()
+        }
+      }
+    })
+    client.publish('BasicMockCommand', {test: true})
   })
 })
