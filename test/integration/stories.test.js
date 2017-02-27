@@ -9,9 +9,9 @@ const Server = require('../../').Server
 const server = new Server({
   bus: {
     host: 'localhost',
-    port: 5656,
-    user: 'admin',
-    pass: 'none'
+    port: 5672,
+    user: 'guest',
+    pass: 'guest'
   },
   source: path.resolve(__dirname, '../..', 'examples'),
   patterns: [
@@ -23,9 +23,9 @@ const server = new Server({
 const Client = require('../..').Client
 const client = new Client({
   host: 'localhost',
-  port: 5656,
-  user: 'admin',
-  pass: 'none'
+  port: 5672,
+  user: 'guest',
+  pass: 'guest'
 })
 
 describe('[integration] stories', function () {

@@ -2,7 +2,7 @@ machine:
   timezone:
     Europe/Paris
   node:
-    version: 6.9.1
+    version: 6.9.5
   pre:
     - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
     - pip install docker-compose

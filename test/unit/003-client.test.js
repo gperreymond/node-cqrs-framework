@@ -31,7 +31,7 @@ describe('[unit] class client', function () {
       .catch(done)
   })
   it('should successfully use send', function (done) {
-    var stub = sinon.stub(Rabbus, 'Sender', (rabbot, name) => {
+    var stub = sinon.stub(Rabbus, 'Sender').callsFake((rabbot, name) => {
       return {
         send (params, acknowledgement) {
           acknowledgement()
@@ -47,7 +47,7 @@ describe('[unit] class client', function () {
     })
   })
   it('should successfully use request', function (done) {
-    var stub = sinon.stub(Rabbus, 'Requester', (rabbot, name) => {
+    var stub = sinon.stub(Rabbus, 'Requester').callsFake((rabbot, name) => {
       return {
         request (params, callback) {
           callback(params)
@@ -62,7 +62,7 @@ describe('[unit] class client', function () {
     })
   })
   it('should successfully use publish', function (done) {
-    var stub = sinon.stub(Rabbus, 'Publisher', (rabbot, name) => {
+    var stub = sinon.stub(Rabbus, 'Publisher').callsFake((rabbot, name) => {
       return {
         publish (params, callback) {
           stub.restore()

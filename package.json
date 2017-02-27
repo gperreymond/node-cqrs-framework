@@ -1,10 +1,9 @@
 {
   "name": "node-cqrs-framework",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Do not use, research only.",
   "main": "index.js",
   "scripts": {
-    "setup:deve": "./npm-scripts/setup-deve.sh",
     "test": "./npm-scripts/test.sh",
     "test:standard": "node_modules/.bin/standard --verbose | snazzy",
     "test:unit": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 5000 --use_strict --recursive test/unit",
@@ -26,26 +25,26 @@
     "node": "~6"
   },
   "dependencies": {
-    "bluebird": "3.4.6",
-    "debug": "2.3.3",
+    "bluebird": "3.4.7",
+    "debug": "2.6.1",
     "eraro": "0.4.1",
     "glob": "7.1.1",
     "hoek": "4.1.0",
-    "lodash": "4.17.2",
-    "rabbot": "1.0.6",
+    "lodash": "4.17.4",
+    "rabbot": "1.0.8",
     "rabbus": "0.8.2",
-    "uuid": "3.0.0"
+    "uuid": "3.0.1"
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "chance": "1.0.4",
-    "codacy-coverage": "2.0.0",
+    "chance": "1.0.6",
+    "codacy-coverage": "2.0.1",
     "istanbul": "0.4.5",
-    "joi": "10.0.1",
+    "joi": "10.2.2",
     "mocha": "3.2.0",
     "mocha-standard": "1.0.0",
-    "sinon": "1.17.6",
-    "snazzy": "5.0.0",
+    "sinon": "2.0.0-pre.6",
+    "snazzy": "6.0.0",
     "standard": "8.6.0"
   },
   "standard": {
