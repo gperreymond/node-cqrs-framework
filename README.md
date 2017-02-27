@@ -177,7 +177,9 @@ The Publish / Subscribe object pair uses a fanout exchange inside of RabbitMQ, a
 The request/response pair uses a "topic" exchange.
 With a request/response setup, you can send a request for information and respond to it.
 
-###### Sender/Receiver examples
+#### Examples
+
+###### Sender/Receiver
 
 * When the __server__ start and load your handlers, receivers are created in the __server__.
 * Sender client is a classic fire and forget on the bus. In return you will have only a result who informs you if the __command__ or the __query__ has been executed succesfully or not.  
@@ -251,9 +253,9 @@ And here the result:
 * [x] Publisher implemented
 * [x] Subscriber implemented
 * [x] Sender implemented
-* [ ] Receiver implemented
-* [ ] Request implemented
-* [ ] Response not implemented yet
+* [x] Receiver implemented
+* [x] Request implemented
+* [x] Response not implemented yet
 
 ```
 

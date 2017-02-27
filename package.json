@@ -1,6 +1,6 @@
 {
   "name": "node-cqrs-framework",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Do not use, research only.",
   "main": "index.js",
   "scripts": {
@@ -49,6 +49,7 @@
   },
   "standard": {
     "globals": [
+      "beforeEach",
       "describe",
       "it"
     ],

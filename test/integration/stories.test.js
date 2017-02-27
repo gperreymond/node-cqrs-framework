@@ -29,6 +29,10 @@ const client = new Client({
 })
 
 describe('[integration] stories', function () {
+  beforeEach(function (done) {
+    setTimeout(done, 1000)
+  })
+
   it('should start the server', function (done) {
     server
       .initialize()
