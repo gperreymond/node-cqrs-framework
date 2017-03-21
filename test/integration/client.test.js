@@ -28,7 +28,7 @@ const client = new Client({
   pass: 'guest'
 })
 
-describe('[integration] stories', function () {
+describe('[integration] client stories', function () {
   beforeEach(function (done) {
     setTimeout(done, 1000)
   })
@@ -46,10 +46,8 @@ describe('[integration] stories', function () {
   it('should start the client', function (done) {
     client
       .subscribe('BasicNopeResolveCommand.Success', () => {
-        console.log('BasicNopeResolveCommand.Success')
       })
       .subscribe('BasicNopeRejectCommand.Error', () => {
-        console.log('BasicNopeRejectCommand.Error')
       })
       .initialize()
       .then(() => {
@@ -67,13 +65,11 @@ describe('[integration] stories', function () {
   })
   it('should use the client and send a command for a resolve', function (done) {
     client.send('BasicNopeResolveCommand', {test: true}, (result) => {
-      console.log(result)
       done()
     })
   })
   it('should use the client and request a command for a resolve', function (done) {
     client.request('BasicNopeResolveCommand', {test: true}, (result) => {
-      console.log(result)
       done()
     })
   })

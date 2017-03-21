@@ -2,5 +2,5 @@
 --use_strict
 --recursive test/standard.test.js
 --recursive test/unit
---recursive test/integration
+--recursive test/integration2
 --recursive test/coverage-max.test.js

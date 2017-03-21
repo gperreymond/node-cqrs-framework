@@ -29,7 +29,7 @@ const handlerMockPublisher = function () {}
 const MockPluginA = function () {}
 const MockPluginB = function () {}
 
-describe('[unit] class server', function () {
+describe.only('[unit] class server', function () {
   it('should load files and create handlers', function (done) {
     const server = new Server({
       rabbot: rabbotMock,
@@ -62,14 +62,14 @@ describe('[unit] class server', function () {
       patterns: ['commands/**/*.js', 'queries/**/*.js']
     })
     server.services = {
-      'HandlerMockReject': new Command('HandlerMockReject', handlerMockReject)
+      'HandlerMockRejectCommand': new Command('HandlerMockRejectCommand', handlerMockReject)
     }
     server.publishers = {
-      'HandlerMockReject.Error': {
+      'HandlerMockRejectCommand.Error': {
         publish: handlerMockPublisher
       }
     }
-    server.execute('HandlerMockReject')
+    server.execute('HandlerMockRejectCommand')
       .then(() => {
         done(new Error('no error detected'))
       })
@@ -93,14 +93,14 @@ describe('[unit] class server', function () {
       patterns: ['commands/**/*.js', 'queries/**/*.js']
     })
     server.services = {
-      'HandlerMockResolve': new Command('HandlerMockResolve', handlerMockResolve)
+      'HandlerMockResolveCommand': new Command('HandlerMockResolveCommand', handlerMockResolve)
     }
     server.publishers = {
-      'HandlerMockResolve.Success': {
+      'HandlerMockResolveCommand.Success': {
         publish: handlerMockPublisher
       }
     }
-    server.execute('HandlerMockResolve')
+    server.execute('HandlerMockResolveCommand')
       .then((result) => {
         expect(result).to.be.an('object')
         done()
