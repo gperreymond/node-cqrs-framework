@@ -29,7 +29,7 @@ const handlerMockPublisher = function () {}
 const MockPluginA = function () {}
 const MockPluginB = function () {}
 
-describe.only('[unit] class server', function () {
+describe('[unit] class server', function () {
   it('should load files and create handlers', function (done) {
     const server = new Server({
       rabbot: rabbotMock,

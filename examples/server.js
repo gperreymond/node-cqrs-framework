@@ -20,6 +20,7 @@ const server = new Server({
 
 // server handlers
 const readyHandler = () => {
+  console.log('server is ready')
 }
 const errorHandler = (error) => {
   console.log(error)

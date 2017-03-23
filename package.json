@@ -40,7 +40,7 @@
     "chance": "1.0.6",
     "codacy-coverage": "2.0.1",
     "istanbul": "0.4.5",
-    "joi": "10.2.2",
+    "joi": "10.3.0",
     "mocha": "3.2.0",
     "mocha-standard": "1.0.0",
     "sinon": "2.1.0",

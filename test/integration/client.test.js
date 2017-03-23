@@ -22,10 +22,12 @@ const server = new Server({
 // client configuration
 const Client = require('../..').Client
 const client = new Client({
-  host: 'localhost',
-  port: 5672,
-  user: 'guest',
-  pass: 'guest'
+  bus: {
+    host: 'localhost',
+    port: 5672,
+    user: 'guest',
+    pass: 'guest'
+  }
 })
 
 describe('[integration] client stories', function () {
