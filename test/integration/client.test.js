@@ -22,13 +22,15 @@ const server = new Server({
 // client configuration
 const Client = require('../..').Client
 const client = new Client({
-  host: 'localhost',
-  port: 5672,
-  user: 'guest',
-  pass: 'guest'
+  bus: {
+    host: 'localhost',
+    port: 5672,
+    user: 'guest',
+    pass: 'guest'
+  }
 })
 
-describe('[integration] stories', function () {
+describe('[integration] client stories', function () {
   beforeEach(function (done) {
     setTimeout(done, 1000)
   })
@@ -46,10 +48,8 @@ describe('[integration] stories', function () {
   it('should start the client', function (done) {
     client
       .subscribe('BasicNopeResolveCommand.Success', () => {
-        console.log('BasicNopeResolveCommand.Success')
       })
       .subscribe('BasicNopeRejectCommand.Error', () => {
-        console.log('BasicNopeRejectCommand.Error')
       })
       .initialize()
       .then(() => {
@@ -67,13 +67,11 @@ describe('[integration] stories', function () {
   })
   it('should use the client and send a command for a resolve', function (done) {
     client.send('BasicNopeResolveCommand', {test: true}, (result) => {
-      console.log(result)
       done()
     })
   })
   it('should use the client and request a command for a resolve', function (done) {
     client.request('BasicNopeResolveCommand', {test: true}, (result) => {
-      console.log(result)
       done()
     })
   })

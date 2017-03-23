@@ -4,9 +4,9 @@
 const Client = require('../').Client
 const client = new Client({
   host: 'localhost',
-  port: 5656,
-  user: 'admin',
-  pass: 'none'
+  port: 5672,
+  user: 'guest',
+  pass: 'guest'
 })
 
 // client handlers

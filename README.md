@@ -11,15 +11,15 @@ node-cqrs-framework use the powerfull Rabbus (https://github.com/derickbailey/ra
 
 ## Description
 
-*This project has just started, do not use yet.*
-
-Think better! Think KISS!
+You can use in your R&D, and give me back issues.
 
 ## Advantages
 
+* Think better! Think KISS!
+* Configuration-driven oriented framework.
 * Only one monolithic project in your github.
 * Only one monolithic project to maintain.
-* Configuration-driven oriented framework.
+* Start only the services you want with configuration file.
 * Agnostics commands and queries, they just had to be promises.
 * Tests are dissociate from the notion of CQRS.
 * Deploy and scale your microservices like you want.

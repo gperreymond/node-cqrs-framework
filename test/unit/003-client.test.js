@@ -15,7 +15,9 @@ const successMockCommandHandler = () => {
 
 const client = new Client({
   rabbot: rabbotMock,
-  port: 6666
+  bus: {
+    port: 6666
+  }
 })
 
 describe('[unit] class client', function () {

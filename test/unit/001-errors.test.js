@@ -83,7 +83,9 @@ describe('[unit] errors', function () {
   it('should be catch on client without rabbitmq connection', function (done) {
     const client = new Client({
       rabbot: rabbotMock,
-      port: 1111
+      bus: {
+        port: 1111
+      }
     })
     client.initialize()
       .then(() => {
