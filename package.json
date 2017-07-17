@@ -1,6 +1,6 @@
 {
   "name": "node-cqrs-framework",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Do not use, research only.",
   "main": "index.js",
   "scripts": {
@@ -26,24 +26,24 @@
   },
   "dependencies": {
     "bluebird": "3.5.0",
-    "debug": "2.6.4",
+    "debug": "2.6.8",
     "eraro": "0.4.1",
-    "glob": "7.1.1",
+    "glob": "7.1.2",
     "hoek": "4.1.1",
     "lodash": "4.17.4",
     "rabbot": "1.1.0",
     "rabbus": "0.8.2",
-    "uuid": "3.0.1"
+    "uuid": "3.1.0"
   },
   "devDependencies": {
-    "chai": "3.5.0",
-    "chance": "1.0.6",
+    "chai": "4.1.0",
+    "chance": "1.0.10",
     "codacy-coverage": "2.0.2",
     "istanbul": "0.4.5",
-    "joi": "10.4.1",
-    "mocha": "3.2.0",
+    "joi": "10.6.0",
+    "mocha": "3.4.2",
     "mocha-standard": "1.0.0",
-    "sinon": "2.1.0",
+    "sinon": "2.3.8",
     "snazzy": "7.0.0",
     "standard": "10.0.2"
   },
