@@ -1,7 +1,7 @@
 {
   "name": "node-cqrs-framework",
-  "version": "1.0.2",
-  "description": "Do not use, research only.",
+  "version": "1.0.3",
+  "description": "A CQRS implementation in nodeJS with promises.",
   "main": "index.js",
   "scripts": {
     "test": "./npm-scripts/test.sh",
@@ -29,7 +29,7 @@
     "debug": "2.6.8",
     "eraro": "0.4.1",
     "glob": "7.1.2",
-    "hoek": "4.1.1",
+    "hoek": "4.2.0",
     "lodash": "4.17.4",
     "rabbot": "1.1.0",
     "rabbus": "0.8.2",
@@ -43,7 +43,7 @@
     "joi": "10.6.0",
     "mocha": "3.4.2",
     "mocha-standard": "1.0.0",
-    "sinon": "2.3.8",
+    "sinon": "2.4.1",
     "snazzy": "7.0.0",
     "standard": "10.0.2"
   },
