@@ -16,6 +16,6 @@ test:
   pre:
     - docker-compose up -d
   override:
-    - npm install
-    - npm prune
-    - npm test
+    - make install
+    - make tests
+    - make coverage

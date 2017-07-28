@@ -1,6 +1,6 @@
 {
   "name": "node-cqrs-framework",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A CQRS implementation in nodeJS with promises.",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "test:standard": "node_modules/.bin/standard --verbose | snazzy",
     "test:unit": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 5000 --use_strict --recursive test/unit",
     "test:integration": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 5000 --use_strict --recursive test/integration",
-    "test:coverage": "node_modules/.bin/istanbul cover -x 'examples/**/*.*' node_modules/.bin/_mocha -- --opts .mocharc"
+    "test:coverage": "node_modules/.bin/istanbul cover -x 'examples/**/*.*' node_modules/.bin/_mocha -- --opts .mocharc",
+    "coverage:publish": "export CODACY_PROJECT_TOKEN=5705316ff8f6499d9373f0f76340bfa5 && cat coverage/lcov.info | node_modules/.bin/codacy-coverage"
   },
   "repository": {
     "type": "git",
