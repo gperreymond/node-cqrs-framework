@@ -12,10 +12,6 @@
 node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures over rabbitmq service discovery.  
 node-cqrs-framework use the powerfull Rabbus (https://github.com/derickbailey/rabbus) to manipulate RabbitMQ.
 
-## Description
-
-You can use in your R&D, and give me back issues.
-
 ## Advantages
 
 * Think better! Think KISS!
