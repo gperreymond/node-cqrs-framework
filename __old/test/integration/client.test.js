@@ -20,15 +20,16 @@ const server = new Server({
 })
 
 // client configuration
-const Client = require('../..').Client
-const client = new Client({
+const options = {
   bus: {
     host: 'localhost',
     port: 5672,
     user: 'guest',
     pass: 'guest'
   }
-})
+}
+const Client = require('../..').Client
+const client = new Client(options.bus)
 
 describe('[integration] client stories', function () {
   beforeEach(function (done) {

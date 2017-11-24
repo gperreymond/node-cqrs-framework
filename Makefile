@@ -1,12 +1,10 @@
-.PHONY: default install test up
-
-default: install
+.PHONY: test up down
 
 up:
 	docker-compose up -d;
 
-install:
-	npm install;
+down:
+	docker-compose down
 
 test:
 	rm -rf coverage;
