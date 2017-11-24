@@ -1,13 +1,8 @@
 # node-cqrs-framework
 
-[![dependencies Status](https://david-dm.org/gperreymond/node-cqrs-framework/status.svg)](https://david-dm.org/gperreymond/node-cqrs-framework)
-[![devDependencies Status](https://david-dm.org/gperreymond/node-cqrs-framework/dev-status.svg)](https://david-dm.org/gperreymond/node-cqrs-framework?type=dev)
-
- [![JavaScript Style Guide](https://img.shields.io/badge/code/style-standard-brightgreen.png)](http://standardjs.com/)
- [![Codacy  Badge](https://api.codacy.com/project/badge/Grade/631ec702300943ccaabaa91e47a4dbc1)](https://www.codacy.com/app/abibao-group/node-cqrs-framework?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gperreymond/node-cqrs-framework&amp;utm_campaign=Badge_Grade)
- [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/631ec702300943ccaabaa91e47a4dbc1)](https://www.codacy.com/app/abibao-group/node-cqrs-framework?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gperreymond/node-cqrs-framework&amp;utm_campaign=Badge_Coverage)
-
 [![CircleCI](https://circleci.com/gh/gperreymond/node-cqrs-framework.svg?style=shield)](https://circleci.com/gh/gperreymond/node-cqrs-framework)
+[![CodeFactor](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework/badge)](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework)
+[![Coverage Status](https://coveralls.io/repos/github/gperreymond/node-cqrs-framework/badge.svg?branch=master)](https://coveralls.io/github/gperreymond/node-cqrs-framework?branch=master)
 
 node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures over rabbitmq service discovery.  
 node-cqrs-framework use the powerfull Rabbus (https://github.com/derickbailey/rabbus) to manipulate RabbitMQ.

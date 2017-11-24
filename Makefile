@@ -1,4 +1,4 @@
-.PHONY: default install tests coverage up
+.PHONY: default install test up
 
 default: install
 
@@ -8,10 +8,7 @@ up:
 install:
 	npm install;
 
-tests:
+test:
 	rm -rf coverage;
 	npm run test:standard;
 	npm run test:coverage;
-
-coverage:
-	npm run coverage:publish

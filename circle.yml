@@ -2,20 +2,10 @@ machine:
   timezone:
     Europe/Paris
   node:
-    version: 6
+    version: 8
   services:
     - docker
-  pre:
-    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
-    - docker --version
-dependencies:
-  pre:
-    - curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > ../bin/docker-compose && chmod +x ../bin/docker-compose
-    - docker-compose --version
 test:
-  pre:
-    - docker-compose up -d
   override:
-    - make install
-    - make tests
+    - make test
     - make coverage
