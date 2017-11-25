@@ -5,18 +5,6 @@ const RabbotMock = require('../../mocks/RabbotMock')
 const Server = require('../../../lib/Server')
 
 describe('[unit] class Server', () => {
-  it('should fail to initialize, because options found', async () => {
-    const server = new Server()
-    try {
-      await server.initialize()
-    } catch (error) {
-      expect(error.eraro).to.equal(true)
-      expect(error.code).to.equal('bus_not_connected')
-      expect(error['cqrs-framework']).to.equal(true)
-      expect(error.package).to.equal('cqrs-framework')
-      expect(error.msg).to.equal('cqrs-framework: bus_not_connected')
-    }
-  })
   it('should fail to initialize, because no bus connected', async () => {
     const server = new Server({
       bus: {
@@ -35,23 +23,7 @@ describe('[unit] class Server', () => {
       expect(error.msg).to.equal('cqrs-framework: bus_not_connected')
     }
   })
-  it('should fail to initialize, because no patterns found', async () => {
-    const server = new Server({
-      bus: {
-        port: 1111
-      }
-    })
-    try {
-      await server.initialize()
-    } catch (error) {
-      expect(error.eraro).to.equal(true)
-      expect(error.code).to.equal('options_patterns_undefined')
-      expect(error['cqrs-framework']).to.equal(true)
-      expect(error.package).to.equal('cqrs-framework')
-      expect(error.msg).to.equal('cqrs-framework: options_patterns_undefined')
-    }
-  })
-  it('should success to initialize', async () => {
+  it('should initialize succesfuly', async () => {
     const server = new Server({
       bus: {
         port: 6666

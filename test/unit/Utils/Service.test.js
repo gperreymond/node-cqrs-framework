@@ -3,10 +3,9 @@ const expect = require('chai').expect
 const Service = require('../../../lib/Utils/Service')
 
 describe('[unit] class Service', () => {
-  it('should initialize', (done) => {
+  it('should initialize', async () => {
     const service = new Service()
     expect(service.uuid).to.be.a('string')
-    done()
   })
   it('should fail to execute a handler, because handler is undefined', async () => {
     const service = new Service()
