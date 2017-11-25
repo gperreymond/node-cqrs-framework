@@ -16,11 +16,12 @@ class RabbotMock {
         return reject(new Error('this is an error'))
       }
       if (options.connection.port === 6666) {
-        this.__connected = true
-        this.emit('connected')
-        return resolve()
+        setTimeout(() => {
+          this.__connected = true
+          this.emit('connected')
+          return resolve()
+        }, 200)
       }
-      reject(new Error('huston, we have a problem!'))
     })
   }
   publish () { }

@@ -1,17 +1,14 @@
 const path = require('path')
 const expect = require('chai').expect
 
-const getHandlers = require('../../../lib/Server/getHandlers')
+const handlers = require('../../../lib/Server/handlers')
 
-describe('[unit] class Server', () => {
-  it('should fail to load handlers, because patterns is undefined', (done) => {
+describe('[unit] class Server - handlers', () => {
+  it('should fail to load services, because patterns is undefined', (done) => {
     const contextMock = {
-      log: {
-        debug () {}
-      },
       options: {}
     }
-    const result = getHandlers(contextMock)
+    const result = handlers(contextMock)
     expect(result.eraro).to.equal(true)
     expect(result.code).to.equal('options_patterns_undefined')
     expect(result['cqrs-framework']).to.equal(true)
@@ -19,16 +16,13 @@ describe('[unit] class Server', () => {
     expect(result.msg).to.equal('cqrs-framework: options_patterns_undefined')
     done()
   })
-  it('should fail to load handlers, because source is undefined', (done) => {
+  it('should fail to load services, because source is undefined', (done) => {
     const contextMock = {
-      log: {
-        debug () {}
-      },
       options: {
         patterns: []
       }
     }
-    const result = getHandlers(contextMock)
+    const result = handlers(contextMock)
     expect(result.eraro).to.equal(true)
     expect(result.code).to.equal('options_source_undefined')
     expect(result['cqrs-framework']).to.equal(true)
@@ -36,17 +30,14 @@ describe('[unit] class Server', () => {
     expect(result.msg).to.equal('cqrs-framework: options_source_undefined')
     done()
   })
-  it('should fail to load handlers, because no files found', (done) => {
+  it('should fail to load services, because no files found', (done) => {
     const contextMock = {
-      log: {
-        debug () {}
-      },
       options: {
         source: path.resolve(__dirname),
         patterns: []
       }
     }
-    const result = getHandlers(contextMock)
+    const result = handlers(contextMock)
     expect(result.eraro).to.equal(true)
     expect(result.code).to.equal('options_handlers_not_found')
     expect(result['cqrs-framework']).to.equal(true)
@@ -54,18 +45,34 @@ describe('[unit] class Server', () => {
     expect(result.msg).to.equal('cqrs-framework: options_handlers_not_found')
     done()
   })
-  it('should load handlers', (done) => {
+  it('should not load services, because a name is not good', (done) => {
     const contextMock = {
-      log: {
-        debug () {}
-      },
+      __handlers: {},
+      options: {
+        source: path.resolve(__dirname, '../../../test'),
+        patterns: ['data/bad/*.js']
+      }
+    }
+    const result = handlers(contextMock)
+    expect(result.eraro).to.equal(true)
+    expect(result.code).to.equal('bad_file_name')
+    expect(result['cqrs-framework']).to.equal(true)
+    expect(result.package).to.equal('cqrs-framework')
+    expect(result.msg).to.equal('cqrs-framework: bad_file_name')
+    done()
+  })
+  it('should load services', (done) => {
+    const contextMock = {
+      __handlers: {},
       options: {
         source: path.resolve(__dirname, '../../../test'),
         patterns: ['data/commands/*.js', 'data/queries/*.js']
       }
     }
-    const result = getHandlers(contextMock)
-    expect(result).to.be.an('array')
+    const result = handlers(contextMock)
+    expect(result).to.equal(true)
+    expect(contextMock.__handlers).to.have.property('BasicNopeCommand')
+    expect(contextMock.__handlers).to.have.property('BasicNopeQuery')
     done()
   })
 })
