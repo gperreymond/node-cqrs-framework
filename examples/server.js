@@ -6,9 +6,11 @@ const server = new Server({
   patterns: ['data/commands/*.js', 'data/queries/*.js']
 })
 
-server.initialize().then(() => {
-  console.log('server initialize success')
-}).catch(error => {
-  console.log(error)
-  process.exit(1)
-})
+server
+  .initialize()
+  .then(() => {
+    console.log('server initialize success')
+  }).catch(error => {
+    console.log(error)
+    process.exit(1)
+  })

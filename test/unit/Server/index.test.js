@@ -5,6 +5,23 @@ const RabbotMock = require('../../mocks/RabbotMock')
 const Server = require('../../../lib/Server')
 
 describe('[unit] class Server', () => {
+  it('should fail to initialize, because context.options.source is mandatory', async () => {
+    const server = new Server({
+      bus: {
+        port: 1111
+      },
+      patterns: ['data/commands/*.js', 'data/queries/*.js']
+    })
+    try {
+      await server.initialize()
+    } catch (error) {
+      expect(error.eraro).to.equal(true)
+      expect(error.code).to.equal('context_options_source_mandatory')
+      expect(error['cqrs-framework']).to.equal(true)
+      expect(error.package).to.equal('cqrs-framework')
+      expect(error.msg).to.equal('cqrs-framework: context_options_source_mandatory')
+    }
+  })
   it('should fail to initialize, because no bus connected', async () => {
     const server = new Server({
       bus: {
