@@ -5,25 +5,21 @@ const ServicebusMock = require('../../mocks/ServicebusMock')
 const Server = require('../../../lib/Server')
 
 describe('[unit] class Server', () => {
-  it('should fail to initialize, because context.options.source is mandatory', async () => {
+  it('should fail to initialize, because context.options.source is mandatory', (done) => {
     const server = new Server({
       __bus: new ServicebusMock(),
-      bus: {
-        port: 1111
-      },
       patterns: ['data/commands/*.js', 'data/queries/*.js']
     })
-    try {
-      await server.initialize()
-    } catch (error) {
+    server.initialize().catch(error => {
       expect(error.eraro).to.equal(true)
       expect(error.code).to.equal('context_options_source_mandatory')
       expect(error['cqrs-framework']).to.equal(true)
       expect(error.package).to.equal('cqrs-framework')
       expect(error.msg).to.equal('cqrs-framework: context_options_source_mandatory')
-    }
+      done()
+    })
   })
-  it('should fail to initialize, because no bus connected', async () => {
+  it('should fail to initialize, because no bus connected', (done) => {
     const server = new Server({
       __bus: new ServicebusMock(),
       bus: {
@@ -32,17 +28,16 @@ describe('[unit] class Server', () => {
       source: path.resolve(__dirname, '../../../test'),
       patterns: ['data/commands/*.js', 'data/queries/*.js']
     })
-    try {
-      await server.initialize()
-    } catch (error) {
+    server.initialize().catch(error => {
       expect(error.eraro).to.equal(true)
       expect(error.code).to.equal('bus_not_connected')
       expect(error['cqrs-framework']).to.equal(true)
       expect(error.package).to.equal('cqrs-framework')
       expect(error.msg).to.equal('cqrs-framework: bus_not_connected')
-    }
+      done()
+    })
   })
-  it('should initialize succesfuly', async () => {
+  it('should initialize succesfuly with options.__bus', (done) => {
     const server = new Server({
       __bus: new ServicebusMock(),
       bus: {
@@ -51,6 +46,6 @@ describe('[unit] class Server', () => {
       source: path.resolve(__dirname, '../../../test'),
       patterns: ['data/commands/*.js', 'data/queries/*.js']
     })
-    await server.initialize()
+    server.initialize().then(() => { done() })
   })
 })
