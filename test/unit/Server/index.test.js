@@ -1,12 +1,13 @@
 const path = require('path')
 const expect = require('chai').expect
 
-const RabbotMock = require('../../mocks/RabbotMock')
+const ServicebusMock = require('../../mocks/ServicebusMock')
 const Server = require('../../../lib/Server')
 
 describe('[unit] class Server', () => {
   it('should fail to initialize, because context.options.source is mandatory', async () => {
     const server = new Server({
+      __bus: new ServicebusMock(),
       bus: {
         port: 1111
       },
@@ -24,6 +25,7 @@ describe('[unit] class Server', () => {
   })
   it('should fail to initialize, because no bus connected', async () => {
     const server = new Server({
+      __bus: new ServicebusMock(),
       bus: {
         port: 1111
       },
@@ -42,14 +44,13 @@ describe('[unit] class Server', () => {
   })
   it('should initialize succesfuly', async () => {
     const server = new Server({
+      __bus: new ServicebusMock(),
       bus: {
         port: 6666
       },
       source: path.resolve(__dirname, '../../../test'),
       patterns: ['data/commands/*.js', 'data/queries/*.js']
     })
-    server.__bus = new RabbotMock()
     await server.initialize()
-    server.__bus.emit('closed')
   })
 })
