@@ -15,6 +15,7 @@ class BusMock {
     }
     EventEmitter.call(this)
   }
+  subscribe () {}
 }
 util.inherits(BusMock, EventEmitter)
 

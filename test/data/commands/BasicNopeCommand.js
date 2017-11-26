@@ -2,7 +2,9 @@ const Promise = require('bluebird')
 
 const handler = function (params) {
   return new Promise((resolve, reject) => {
-    resolve(params)
+    setTimeout(function () {
+      reject(new Error('not good!'))
+    }, 1000)
   })
 }
 

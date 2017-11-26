@@ -2,7 +2,7 @@ const expect = require('chai').expect
 
 const Service = require('../../../lib/Utils/Service')
 
-describe('[unit] class Service', () => {
+describe.only('[unit] class Service', () => {
   it('should initialize', async () => {
     const service = new Service()
     expect(service.uuid).to.be.a('string')
