@@ -2,7 +2,7 @@ const expect = require('chai').expect
 
 const Service = require('../../../lib/Utils/Service')
 
-describe.only('[unit] class Service', () => {
+describe('[unit] class Service', () => {
   it('should initialize', async () => {
     const service = new Service()
     expect(service.uuid).to.be.a('string')
@@ -11,22 +11,22 @@ describe.only('[unit] class Service', () => {
     const service = new Service()
     const result = await service.execute()
     expect(service.uuid).to.be.a('string')
-    expect(result.eraro).to.equal(true)
-    expect(result.code).to.equal('service_handler_undefined')
-    expect(result['cqrs-framework']).to.equal(true)
-    expect(result.package).to.equal('cqrs-framework')
-    expect(result.msg).to.equal('cqrs-framework: service_handler_undefined')
+    expect(result.result.eraro).to.equal(true)
+    expect(result.result.code).to.equal('service_handler_undefined')
+    expect(result.result['cqrs-framework']).to.equal(true)
+    expect(result.result.package).to.equal('cqrs-framework')
+    expect(result.result.msg).to.equal('cqrs-framework: service_handler_undefined')
   })
   it('should fail to execute a handler, because type is undefined', async () => {
     const service = new Service()
     service.handler = true
     const result = await service.execute()
     expect(service.uuid).to.be.a('string')
-    expect(result.eraro).to.equal(true)
-    expect(result.code).to.equal('service_type_undefined')
-    expect(result['cqrs-framework']).to.equal(true)
-    expect(result.package).to.equal('cqrs-framework')
-    expect(result.msg).to.equal('cqrs-framework: service_type_undefined')
+    expect(result.result.eraro).to.equal(true)
+    expect(result.result.code).to.equal('service_type_undefined')
+    expect(result.result['cqrs-framework']).to.equal(true)
+    expect(result.result.package).to.equal('cqrs-framework')
+    expect(result.result.msg).to.equal('cqrs-framework: service_type_undefined')
   })
   it('should fail to execute a handler, because name is undefined', async () => {
     const service = new Service()
@@ -34,15 +34,16 @@ describe.only('[unit] class Service', () => {
     service.handler = true
     const result = await service.execute()
     expect(service.uuid).to.be.a('string')
-    expect(result.eraro).to.equal(true)
-    expect(result.code).to.equal('service_name_undefined')
-    expect(result['cqrs-framework']).to.equal(true)
-    expect(result.package).to.equal('cqrs-framework')
-    expect(result.msg).to.equal('cqrs-framework: service_name_undefined')
+    expect(result.result.eraro).to.equal(true)
+    expect(result.result.code).to.equal('service_name_undefined')
+    expect(result.result['cqrs-framework']).to.equal(true)
+    expect(result.result.package).to.equal('cqrs-framework')
+    expect(result.result.msg).to.equal('cqrs-framework: service_name_undefined')
   })
   it('should success to execute a command, and return an error', async () => {
     const service = new Service()
     expect(service.uuid).to.be.a('string')
+    service.EventError = 'BasicNopeCommand.Error'
     service.name = 'BasicNopeCommand'
     service.type = 'Command'
     service.handler = function (params) {
@@ -54,19 +55,20 @@ describe.only('[unit] class Service', () => {
     }
     const result = await service.execute()
     expect(service.uuid).to.be.a('string')
-    expect(result.eraro).to.equal(true)
-    expect(result.code).to.equal('service_error')
-    expect(result['cqrs-framework']).to.equal(true)
-    expect(result.package).to.equal('cqrs-framework')
-    expect(result.msg).to.equal('cqrs-framework: service_error')
-    expect(result.details.type).to.equal('Command.Error')
-    expect(result.details.name).to.equal('BasicNopeCommand')
+    expect(result.result.eraro).to.equal(true)
+    expect(result.result.code).to.equal('service_error')
+    expect(result.result['cqrs-framework']).to.equal(true)
+    expect(result.result.package).to.equal('cqrs-framework')
+    expect(result.result.msg).to.equal('cqrs-framework: service_error')
+    expect(result.type).to.equal('Command')
+    expect(result.name).to.equal('BasicNopeCommand')
+    expect(result.event).to.equal('BasicNopeCommand.Error')
   })
   it('should success to execute a command, and return a result', async () => {
     const service = new Service()
-    expect(service.uuid).to.be.a('string')
     service.name = 'BasicNopeCommand'
     service.type = 'Command'
+    service.EventSuccess = 'BasicNopeCommand.Success'
     service.handler = function (params) {
       return new Promise((resolve, reject) => {
         setTimeout(function () {
@@ -76,12 +78,13 @@ describe.only('[unit] class Service', () => {
     }
     const result = await service.execute()
     expect(service.uuid).to.be.a('string')
-    expect(result.type).to.equal('Command.Success')
+    expect(result.type).to.equal('Command')
     expect(result.name).to.equal('BasicNopeCommand')
+    expect(result.event).to.equal('BasicNopeCommand.Success')
   })
   it('should success to execute a query, and return a result', async () => {
     const service = new Service()
-    expect(service.uuid).to.be.a('string')
+    service.EventSuccess = 'BasicNopeQuery.Success'
     service.name = 'BasicNopeQuery'
     service.type = 'Query'
     service.handler = function (params) {
@@ -93,8 +96,9 @@ describe.only('[unit] class Service', () => {
     }
     const result = await service.execute()
     expect(service.uuid).to.be.a('string')
-    expect(result.type).to.equal('Query.Success')
+    expect(result.type).to.equal('Query')
     expect(result.name).to.equal('BasicNopeQuery')
+    expect(result.event).to.equal('BasicNopeQuery.Success')
     expect(result.result.test).to.equal(true)
   })
 })
