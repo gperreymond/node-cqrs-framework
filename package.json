@@ -1,6 +1,6 @@
 {
   "name": "node-cqrs-framework",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "A CQRS implementation in nodeJS with promises.",
   "main": "index.js",
   "scripts": {
