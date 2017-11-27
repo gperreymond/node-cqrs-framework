@@ -1,3 +1,4 @@
 --timeout 5000
 --use_strict
 test/standard.test.js
+--recursive test/unit

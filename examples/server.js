@@ -1,16 +1,18 @@
 const path = require('path')
-const Server = require('..').Server
 
-const server = new Server({
-  source: path.resolve(__dirname, '../test'),
-  patterns: ['data/commands/*.js', 'data/queries/*.js']
-})
+const Server = require('..').Server
+const server = new Server()
 
 server
-  .initialize()
-  .then(() => {
-    console.log('server initialize success')
-  }).catch(error => {
-    console.log(error)
-    process.exit(1)
-  })
+  .use(path.resolve(__dirname, '../test/data/commands/*.js'))
+  .use(path.resolve(__dirname, '../test/data/queries/*.js'))
+  .listen()
+
+server.on('error', error => {
+  console.log('server error')
+  console.log(error)
+})
+
+server.on('ready', () => {
+  console.log('server connected')
+})
