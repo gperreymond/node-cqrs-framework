@@ -7,7 +7,7 @@ describe('[unit] the client', () => {
   it('should fail to start, because no bus connected', (done) => {
     const servicebus = new ServicebusMock()
     const client = new Client(servicebus)
-    client.listen({port: 1111})
+    client.start({port: 1111})
     client.on('error', error => {
       expect(error.eraro).to.equal(true)
       expect(error.code).to.equal('internal_error')
@@ -22,7 +22,7 @@ describe('[unit] the client', () => {
     const client = new Client(servicebus)
     client
       .subscribe('BasicTestCommand', () => {})
-      .listen({port: 6666})
+      .start({port: 6666})
     client.on('ready', () => {
       expect(client.__subscribers).to.be.an('object')
       expect(client.__subscribers.BasicTestCommand).to.be.a('function')
@@ -30,17 +30,17 @@ describe('[unit] the client', () => {
       done()
     })
   })
-  it('should success to start, and publish', (done) => {
+  it('should success to start, and send', (done) => {
     const servicebus = new ServicebusMock()
     const client = new Client(servicebus)
     client
-      .listen({port: 6666})
+      .start({port: 6666})
     client.on('ready', () => {
-      client.bus.publish = (name, data) => {
+      client.bus.send = (name, data) => {
         expect(name).to.equal('BasicTestCommand')
         done()
       }
-      client.publish('BasicTestCommand', {test: true})
+      client.send('BasicTestCommand', {test: true})
     })
   })
 })

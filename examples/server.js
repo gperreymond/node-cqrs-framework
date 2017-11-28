@@ -6,7 +6,7 @@ const server = new Server()
 server
   .use(path.resolve(__dirname, '../test/data/commands/*.js'))
   .use(path.resolve(__dirname, '../test/data/queries/*.js'))
-  .listen()
+  .start()
 
 server.on('error', error => {
   console.log('server error')
