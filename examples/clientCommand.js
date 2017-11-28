@@ -1,9 +1,6 @@
 const Client = require('..').Client
-
 const client = new Client()
-
-client
-  .start()
+client.start()
 
 client.on('error', error => {
   console.log('client error')
@@ -12,9 +9,5 @@ client.on('error', error => {
 
 client.on('ready', () => {
   console.log('client connected')
-  let i = 0
-  setInterval(() => {
-    i++
-    client.send('BasicNopeCommand', {email: 'theo@gmail.com', ref: i})
-  }, 5000)
+  client.send('BasicNopeCommand', {email: 'theo@gmail.com'})
 })

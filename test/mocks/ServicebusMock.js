@@ -15,6 +15,7 @@ class BusMock {
     }
     EventEmitter.call(this)
   }
+  use () { return this }
   send () {}
   listen () {}
   publish () {}

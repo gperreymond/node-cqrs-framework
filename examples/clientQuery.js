@@ -1,8 +1,10 @@
 const Client = require('..').Client
-
 const client = new Client()
 
 client
+  .subscribe('BasicNopeQuery.*', (result) => {
+    console.log('success:', result)
+  })
   .start()
 
 client.on('error', error => {
@@ -12,9 +14,13 @@ client.on('error', error => {
 
 client.on('ready', () => {
   console.log('client connected')
-  let i = 0
-  setInterval(() => {
-    i++
-    client.send('BasicNopeQuery', {email: 'melissa@gmail.com', ref: i})
-  }, 5000)
+  client.request('BasicNopeQuery', {email: 'melissa@gmail.com'}, result => {
+    console.log('request', result)
+  })
+  client.request('BasicNopeQuery', {email: 'melissa@gmail.com'}, result => {
+    console.log('request', result)
+  })
+  client.request('BasicNopeQuery', {email: 'melissa@gmail.com'}, result => {
+    console.log('request', result)
+  })
 })
