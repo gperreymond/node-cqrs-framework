@@ -1,4 +1,8 @@
-const Service = require('./Utils/Service')
+'use strict'
+
+const debug = require('debug')('cqrs:command:handler')
+
+const Service = require('./Service')
 
 class Command extends Service {
   constructor (name, handler) {
@@ -9,9 +13,9 @@ class Command extends Service {
     this.EventError = name + '.Error'
     this.handler = handler
   }
-  async execute (params = {}) {
-    const result = await super.execute(params)
-    return result
+  execute (params = {}) {
+    debug('Command-%s-%s is called with params=%o', this.name, this.uuid, params)
+    return super.execute(params)
   }
 }
 

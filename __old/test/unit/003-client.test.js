@@ -10,15 +10,17 @@ const expect = chai.expect
 const RabbotMock = require('../mocks/Rabbot')
 const rabbotMock = new RabbotMock()
 
-const successMockCommandHandler = () => {
-}
-
-const client = new Client({
+const options = {
   rabbot: rabbotMock,
   bus: {
     port: 6666
   }
-})
+}
+
+const successMockCommandHandler = () => {
+}
+
+const client = new Client(options.bus, options.rabbot)
 
 describe('[unit] class client', function () {
   it('should initialize', function (done) {

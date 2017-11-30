@@ -1,4 +1,7 @@
-const Service = require('./Utils/Service')
+'use strict'
+
+const debug = require('debug')('cqrs:query:handler')
+const Service = require('./Service')
 
 class Query extends Service {
   constructor (name, handler) {
@@ -9,9 +12,9 @@ class Query extends Service {
     this.EventError = name + '.Error'
     this.handler = handler
   }
-  async execute (params = {}) {
-    const result = await super.execute(params)
-    return result
+  execute (params = { }) {
+    debug('Query-%s-%s is called with params=%o', this.name, this.uuid, params)
+    return super.execute(params)
   }
 }
 

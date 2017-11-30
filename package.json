@@ -1,14 +1,12 @@
 {
   "name": "node-cqrs-framework",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "A CQRS implementation in nodeJS with promises.",
   "main": "index.js",
   "scripts": {
     "test": "./npm-scripts/test.sh",
     "test:standard": "node_modules/.bin/standard --verbose | snazzy",
-    "test:unit": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 5000 --use_strict --recursive test/unit",
-    "test:integration": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --timeout 5000 --use_strict --recursive test/integration",
-    "test:coverage": "node_modules/.bin/istanbul cover -x 'examples/**/*.*' node_modules/.bin/_mocha -- --opts .mocharc"
+    "test:coverage": "./node_modules/.bin/nyc --reporter=lcov --reporter=text ./node_modules/.bin/mocha --opts .mocharc"
   },
   "repository": {
     "type": "git",
@@ -28,26 +26,28 @@
     "bluebird": "3.5.1",
     "debug": "3.1.0",
     "eraro": "0.4.1",
-    "glob": "7.1.2",
+    "glob-promise": "3.3.0",
     "hoek": "5.0.2",
     "lodash": "4.17.4",
-    "rabbot": "1.1.0",
-    "rabbus": "0.8.2",
-    "uuid": "3.1.0"
+    "servicebus": "2.0.10",
+    "uuid": "3.1.0",
+    "winston": "2.4.0"
   },
   "devDependencies": {
     "chai": "4.1.2",
     "chance": "1.0.12",
-    "istanbul": "0.4.5",
     "joi": "13.0.2",
     "mocha": "4.0.1",
     "mocha-standard": "1.0.0",
+    "nyc": "11.3.0",
+    "rewire": "3.0.2",
     "sinon": "4.1.2",
     "snazzy": "7.0.0",
     "standard": "10.0.3"
   },
   "standard": {
     "globals": [
+      "xit",
       "beforeEach",
       "describe",
       "it"
