@@ -27,6 +27,7 @@
     "debug": "3.1.0",
     "eraro": "0.4.1",
     "glob-promise": "3.3.0",
+    "hoek": "5.0.2",
     "lodash": "4.17.4",
     "servicebus": "2.0.10",
     "uuid": "3.1.0",
