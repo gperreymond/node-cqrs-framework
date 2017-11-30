@@ -9,3 +9,9 @@ test:
   override:
     - make test
     - make coverage
+
+deployment:
+  prod:
+    branch: master
+    commands:
+      - make coverage-publish

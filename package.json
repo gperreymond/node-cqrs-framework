@@ -6,7 +6,8 @@
   "scripts": {
     "test": "./npm-scripts/test.sh",
     "test:standard": "node_modules/.bin/standard --verbose | snazzy",
-    "test:coverage": "./node_modules/.bin/nyc --reporter=lcov --reporter=text ./node_modules/.bin/mocha --opts .mocharc"
+    "test:coverage": "./node_modules/.bin/nyc --reporter=lcov --reporter=text ./node_modules/.bin/mocha --opts .mocharc",
+    "coverage:publish": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "repository": {
     "type": "git",
