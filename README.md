@@ -164,10 +164,12 @@ With a request/response setup, you can send a request for information and respon
 Create a file __client-sender.js__, and and this code in:
 
 ```javascript
-const Client = require('..').Client
+const Client = require('node-cqrs-framework').Client
 const client = new Client()
 client
   .subscribe('BasicNopeQuery.*', (result) => {
+    // the pattern 'BasicNopeQuery.*' will receive Error and Success event
+    // you can have a client who listen only to all errors like that : '*.Error'
     console.log(result)
   })
   .start()
@@ -198,17 +200,4 @@ And here the result:
   params: { message: 'This is a query' },
   exectime: 1004,
   result: { data: true } }
-```
-
-###### Roadmap
-
-* [x] Publisher implemented
-* [x] Subscriber implemented
-* [x] Sender implemented
-* [x] Receiver implemented
-* [x] Request implemented
-* [x] Response not implemented yet
-
-```
-
 ```
