@@ -34,39 +34,24 @@ Beware, you need a rabbitmq running in localhost for all those examples.
 The __server__ is the main program, he needs to be start at first. Because the project is configuration-driven, you only need those lines of code to start all selected microservices in a row.
 
 ```javascript
-'use strict'
-
 const path = require('path')
 
-// server configuration
-const Server = require('../').Server
-const server = new Server({
-  bus: {
-    host: 'localhost',
-    port: 5672,
-    user: 'user',
-    pass: 'password'
-  },
-  source: path.resolve(__dirname),
-  patterns: [
-    'commands/**/*.js',
-    'queries/**/*.js'
-  ]
-})
-
-// server handlers
-const readyHandler = () => {
-  // do something if you want!
-}
-const errorHandler = (error) => {
-  console.log(error)
-  process.exit(1)
-}
+const Server = require('node-cqrs-framework').Server
+const server = new Server()
 
 server
-  .initialize()
-  .then(readyHandler)
-  .catch(errorHandler)
+  .use(path.resolve(__dirname, '../test/data/commands/*.js'))
+  .use(path.resolve(__dirname, '../test/data/queries/*.js'))
+  .start()
+
+server.on('error', error => {
+  console.log('server error')
+  console.log(error)
+})
+
+server.on('ready', () => {
+  console.log('server connected')
+})
 ```
 
 #### Service
@@ -93,8 +78,6 @@ __Step 2__
 You need to __module.exports__ a promise.  
 
 ```javascript
-'use strict'
-
 const Promise = require('bluebird')
 
 const handler = function () {
@@ -123,13 +106,11 @@ __Step 2__
 You need to __module.exports__ a promise.  
 
 ```javascript
-'use strict'
-
 const Promise = require('bluebird')
 
 const handler = function () {
   return new Promise((resolve, reject) => {
-    resolve()
+    resolve({data: true})
   })
 }
 
@@ -183,47 +164,23 @@ With a request/response setup, you can send a request for information and respon
 Create a file __client-sender.js__, and and this code in:
 
 ```javascript
-'use strict'
+const Client = require('..').Client
+const client = new Client()
+client
+  .subscribe('BasicNopeQuery.*', (result) => {
+    console.log(result)
+  })
+  .start()
 
-// client configuration
-const Client = require('../').Client
-const client = new Client({
-  host: 'localhost',
-  port: 5672,
-  user: 'user',
-  pass: 'password'
+client.on('error', error => {
+  console.log('client error')
+  console.log(error)
 })
 
-// client subscribe handlers
-const successCommandHandler = (message) => {
-  console.log('successHandler', message)
-}
-const errorCommandHandler = (error) => {
-  console.log('errorHandler', error)
-}
-
-// client handlers
-const readyHandler = () => {
-  let count = 1
-  setInterval(() => {
-    client.send('BasicNopeCommand', {date: Date.now(), count}, (acknowledgement) => {
-      console.log('acknowledgement', acknowledgement)
-      count++
-    })
-  }, 2000)
-}
-const errorHandler = (error) => {
-  console.log(error)
-  process.exit(1)
-}
-
-// client start sequence
-client
-  .subscribe('BasicNopeCommand.Success', successCommandHandler)
-  .subscribe('BasicNopeCommand.Error', errorCommandHandler)
-  .initialize()
-  .then(readyHandler)
-  .catch(errorHandler)
+client.on('ready', () => {
+  console.log('client connected')
+  client.send('BasicNopeQuery', {message: 'This is a query'})
+})
 ```
 
 Time to run:
@@ -235,11 +192,12 @@ $ node client-sender.js
 And here the result:
 
 ```javascript
-{ uuid: 'd6ce4837-8700-46cf-8e7a-356d0e184d2f',
-  type: 'Client.Send',
+{ type: 'Query',
   name: 'BasicNopeQuery',
-  exectime: 655,
-  result: { sended: true } }
+  event: 'BasicNopeQuery.Success',
+  params: { message: 'This is a query' },
+  exectime: 1004,
+  result: { data: true } }
 ```
 
 ###### Roadmap
