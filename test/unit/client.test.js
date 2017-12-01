@@ -43,4 +43,17 @@ describe('[unit] the client', () => {
       client.send('BasicTestCommand', {test: true})
     })
   })
+  it('should success to start, and request', (done) => {
+    const servicebus = new ServicebusMock()
+    const client = new Client(servicebus)
+    client
+      .start({port: 6666})
+    client.on('ready', () => {
+      client.bus.send = (name, data) => {
+        expect(name).to.equal('BasicTestCommand')
+        done()
+      }
+      client.request('BasicTestCommand', {test: true})
+    })
+  })
 })

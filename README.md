@@ -4,8 +4,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework/badge)](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework)
 [![Coverage Status](https://coveralls.io/repos/github/gperreymond/node-cqrs-framework/badge.svg?branch=master)](https://coveralls.io/github/gperreymond/node-cqrs-framework?branch=master)
 
-node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures over rabbitmq service discovery.  
-node-cqrs-framework use the powerfull Rabbus (https://github.com/derickbailey/rabbus) to manipulate RabbitMQ.
+node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures over rabbitmq service discovery.
 
 ## Advantages
 
