@@ -1,12 +1,13 @@
+const rewire = require('rewire')
 const expect = require('chai').expect
 
 const ServicebusMock = require('../mocks/ServicebusMock')
-const Client = require('../../lib/Client')
+let Client = rewire('../../lib/Client')
+Client.__set__('servicebus', new ServicebusMock())
 
 describe('[unit] the client', () => {
   it('should fail to start, because no bus connected', (done) => {
-    const servicebus = new ServicebusMock()
-    const client = new Client(servicebus)
+    const client = new Client()
     client.start({port: 1111})
     client.on('error', error => {
       expect(error.eraro).to.equal(true)
@@ -18,8 +19,7 @@ describe('[unit] the client', () => {
     })
   })
   it('should success to start, and close', (done) => {
-    const servicebus = new ServicebusMock()
-    const client = new Client(servicebus)
+    const client = new Client()
     client
       .subscribe('BasicTestCommand', () => {})
       .start({port: 6666})
@@ -31,8 +31,7 @@ describe('[unit] the client', () => {
     })
   })
   it('should success to start, and send', (done) => {
-    const servicebus = new ServicebusMock()
-    const client = new Client(servicebus)
+    const client = new Client()
     client
       .start({port: 6666})
     client.on('ready', () => {
@@ -44,8 +43,7 @@ describe('[unit] the client', () => {
     })
   })
   it('should success to start, and request', (done) => {
-    const servicebus = new ServicebusMock()
-    const client = new Client(servicebus)
+    const client = new Client()
     client
       .start({port: 6666})
     client.on('ready', () => {
