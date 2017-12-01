@@ -3,7 +3,6 @@ const client = new Client()
 client
   .subscribe('BasicNopeQuery.Success', (result) => {
     console.log('success', result)
-    client.close()
   })
   .subscribe('BasicNopeQuery.Error', (result) => {
     console.log('error', result)
@@ -18,5 +17,8 @@ client.on('error', error => {
 
 client.on('ready', () => {
   console.log('client connected')
-  client.send('BasicNopeQuery', {message: 'This is a query'})
+  client.request('BasicNopeQuery', {message: 'This is a query'}, (data) => {
+    console.log('result', data)
+    client.close()
+  })
 })

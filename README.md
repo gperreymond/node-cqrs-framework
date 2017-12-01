@@ -4,8 +4,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework/badge)](https://www.codefactor.io/repository/github/gperreymond/node-cqrs-framework)
 [![Coverage Status](https://coveralls.io/repos/github/gperreymond/node-cqrs-framework/badge.svg?branch=master)](https://coveralls.io/github/gperreymond/node-cqrs-framework?branch=master)
 
-node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures over rabbitmq service discovery.  
-node-cqrs-framework use the powerfull Rabbus (https://github.com/derickbailey/rabbus) to manipulate RabbitMQ.
+node-cqrs-framework is a node.js framework that helps you to implement microservices and scalability for cqrs architectures over rabbitmq service discovery.
 
 ## Advantages
 
@@ -33,16 +32,35 @@ Beware, you need a rabbitmq running in localhost for all those examples.
 
 The __server__ is the main program, he needs to be start at first. Because the project is configuration-driven, you only need those lines of code to start all selected microservices in a row.
 
+__Glob patterns__
+
+This syntax will load all pomises in this dirpath and attach a 1:1 queue for execute the promise. And attach two 1:N queues (on for success event, and the second for error event).
+```javascript
+server.use(path.resolve(__dirname, '../test/data/commands/*.js'))
+```
+
+__Simple server__
+
 ```javascript
 const path = require('path')
 
 const Server = require('node-cqrs-framework').Server
 const server = new Server()
 
+// all options from servicebus (see npm)
+const options = {
+  host: 'localhost',
+  port: 5672,
+  user: 'guest',
+  pass: 'guest',
+  timeout: 2000,
+  heartbeat: 10
+}
+
 server
   .use(path.resolve(__dirname, '../test/data/commands/*.js'))
   .use(path.resolve(__dirname, '../test/data/queries/*.js'))
-  .start()
+  .start(options)
 
 server.on('error', error => {
   console.log('server error')
@@ -121,13 +139,13 @@ module.exports = handler
 Classic start:
 
 ```
-$ node server.js
+$ node examples/server.js
 ```
 
 But, you can run the server in debug mode.
 
 ```
-$ DEBUG=cqrs:* node server.js
+$ DEBUG=cqrs:* node examples/server.js
 ```
 
 #### Client
@@ -152,27 +170,37 @@ The Publish / Subscribe object pair uses a fanout exchange inside of RabbitMQ, a
 The request/response pair uses a "topic" exchange.
 With a request/response setup, you can send a request for information and respond to it.
 
-#### Examples
-
-###### Sender/Receiver
+#### Send a Query
 
 * When the __server__ start and load your handlers, receivers are created in the __server__.
 * Sender client is a classic fire and forget on the bus. In return you will have only a result who informs you if the __command__ or the __query__ has been executed succesfully or not.  
-* With this pattern you can't know the real result of the service.  
-* You can use this pattern if you want to run a batch, or an emails service runner, etc.
 
 Create a file __client-sender.js__, and and this code in:
 
 ```javascript
 const Client = require('node-cqrs-framework').Client
 const client = new Client()
+
+// all options from servicebus (see npm)
+const options = {
+  host: 'localhost',
+  port: 5672,
+  user: 'guest',
+  pass: 'guest',
+  timeout: 2000,
+  heartbeat: 10
+}
+
 client
-  .subscribe('BasicNopeQuery.*', (result) => {
-    // the pattern 'BasicNopeQuery.*' will receive Error and Success event
-    // you can have a client who listen only to all errors like that : '*.Error'
-    console.log(result)
+  .subscribe('BasicNopeQuery.Success', (result) => {
+    console.log('success', result)
+    client.close()
   })
-  .start()
+  .subscribe('BasicNopeQuery.Error', (result) => {
+    console.log('error', result)
+    client.close()
+  })
+  .start(options)
 
 client.on('error', error => {
   console.log('client error')
@@ -185,13 +213,25 @@ client.on('ready', () => {
 })
 ```
 
-Time to run:
+__Nota__
+- The pattern __BasicNopeQuery.*__ will receive Error and Success event for one specific Query.
+- The pattern __*.Error__ will receive Errors for all Commands and Queries.
+
+#### Now it's time to start the client-send
+
+Classic start:
 
 ```
-$ node client-sender.js
+$ node examples/client-sender.js
 ```
 
-And here the result:
+But, you can run the client in debug mode.
+
+```
+$ DEBUG=cqrs:* node examples/client-sender.js
+```
+
+Result will be:
 
 ```javascript
 { type: 'Query',
@@ -199,5 +239,63 @@ And here the result:
   event: 'BasicNopeQuery.Success',
   params: { message: 'This is a query' },
   exectime: 1004,
+  result: { data: true } }
+```
+
+#### Request a Query
+
+* When the __client__ start a  specific queue is created on the __server__.
+* The __server__ will have in the data received an automatic header to help him answering the __client__ who called.
+*  Events succes or error are also published.
+
+Create a file __client-request.js__, and and this code in:
+
+```javascript
+const Client = require('node-cqrs-framework').Client
+const client = new Client()
+client
+  .subscribe('BasicNopeQuery.Success', (result) => {
+    console.log('success', result)
+    client.close()
+  })
+  .subscribe('BasicNopeQuery.Error', (result) => {
+    console.log('error', result)
+    client.close()
+  })
+  .start()
+
+client.on('error', error => {
+  console.log('client error')
+  console.log(error)
+})
+
+client.on('ready', () => {
+  console.log('client connected')
+  client.request('BasicNopeQuery', {message: 'This is a query'}, (data) => {
+    console.log('result', data)
+  })
+})
+```
+
+Result from the success event will be:
+```javascript
+success { type: 'Query',
+  name: 'BasicNopeQuery',
+  event: 'BasicNopeQuery.Success',
+  params:
+   { message: 'This is a query',
+     __headers:
+      { 'x-client-id': 'Client.Response.38057d6b-bd49-4b4b-9727-35146c43789a',
+        'x-request-id': 'cb0d0e12-8f8c-4267-a20f-fb05c653aba6' } },
+  exectime: 1001,
+  result: { data: true } }
+```
+ Result from the response callback will be:
+```javascript
+result { type: 'Query',
+  name: 'BasicNopeQuery',
+  event: 'BasicNopeQuery.Success',
+  params: { message: 'This is a query' },
+  exectime: 1001,
   result: { data: true } }
 ```
